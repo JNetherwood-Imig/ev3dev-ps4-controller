@@ -10,6 +10,7 @@ import struct
 # Declare motors 
 left_motor = Motor(Port.B)
 right_motor = Motor(Port.A)
+arm_motor = Motor(Port.C)
 forward = 0
 left = 0
 right = 0
@@ -30,10 +31,6 @@ def scale(val, src, dst):
 
 
 # Open the Gamepad event file:
-# /dev/input/event3 is for PS3 gamepad
-# /dev/input/event4 is for PS4 gamepad
-# look at contents of /proc/bus/input/devices if either one of them doesn't work.
-# use 'cat /proc/bus/input/devices' and look for the event file.
 infile_path = "/dev/input/event4"
 
 # open file in binary mode
@@ -54,6 +51,15 @@ while event:
             forward = scale(value, (0,255), (100,-100))
         if code == 3: # Right stick x axis
             left = scale(value, (0,255), (100, -100))
+    if ev_type == 1: # Button pressed
+        if code == 310 and value == 1: # L1 pressed
+            arm_motor.dc(40) # Run the motor at 40% speed
+        if code == 310 and value == 0: # L1 released
+            arm_motor.brake()
+        if code == 311 and value == 1: # R1 pressed
+            arm_motor.dc(-40) # Run the motor at 40% speed in the opposite direction
+        if code == 311 and value == 0: # R1 released
+            arm_motor.brake()
         
     # Set motor voltages. 
     left_motor.dc(forward - left)
