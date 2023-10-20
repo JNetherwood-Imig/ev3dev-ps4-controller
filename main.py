@@ -8,8 +8,8 @@ from pybricks.tools import print, wait, StopWatch
 import struct
 
 # Declare motors 
-left_motor = Motor(Port.B)
-right_motor = Motor(Port.A)
+left_motor = Motor(Port.A)
+right_motor = Motor(Port.B)
 arm_motor = Motor(Port.C)
 drive = 0
 steer = 0
@@ -18,7 +18,7 @@ arm = 0
 # A helper function for converting stick values (0 - 255)
 # to more usable numbers (-100 - 100)
 def scale(val, src, dst):
-    """
+    '''
     Scale the given value from the scale of src to the scale of dst.
  
     val: float or int
@@ -26,7 +26,7 @@ def scale(val, src, dst):
     dst: tuple
  
     example: print(scale(99, (0.0, 99.0), (-1.0, +1.0)))
-    """
+    '''
     return (float(val-src[0]) / (src[1]-src[0])) * (dst[1]-dst[0])+dst[0]
 
 
@@ -37,7 +37,6 @@ infile_path = "/dev/input/event4"
 in_file = open(infile_path, "rb")
 
 # Read from the file
-# long int, long int, unsigned short, unsigned short, unsigned int
 FORMAT = 'llHHI'    
 EVENT_SIZE = struct.calcsize(FORMAT)
 event = in_file.read(EVENT_SIZE)
