@@ -11,9 +11,9 @@ import struct
 left_motor = Motor(Port.B)
 right_motor = Motor(Port.A)
 arm_motor = Motor(Port.C)
-forward = 0
-left = 0
-right = 0
+drive = 0
+steer = 0
+arm = 0
 
 # A helper function for converting stick values (0 - 255)
 # to more usable numbers (-100 - 100)
@@ -46,24 +46,26 @@ while event:
     (tv_sec, tv_usec, ev_type, code, value) = struct.unpack(FORMAT, event)
     
     # Read analog stick values    
-    if ev_type == 3: # Stick moved
+    if ev_type == 3: # Stick or trigger moved
         if code == 1: # Left stick y axis
-            forward = scale(value, (0,255), (100,-100))
+            drive = scale(value, (0,255), (100,-100)) # Scale input from 0-255 to -100-100 for the motor
         if code == 3: # Right stick x axis
-            left = scale(value, (0,255), (100, -100))
+            steer = scale(value, (0,255), (100, -100)) # Scale input from 0-255 to -100-100 for the motor
+        if code == 2: # Left trigger axis
+            arm = value / 2
+        if code == 5: # Left trigger axis
+            arm = -value / 2
     if ev_type == 1: # Button pressed
         if code == 310 and value == 1: # L1 pressed
-            arm_motor.dc(40) # Run the motor at 40% speed
+            # do something
         if code == 310 and value == 0: # L1 released
-            arm_motor.brake()
-        if code == 311 and value == 1: # R1 pressed
-            arm_motor.dc(-40) # Run the motor at 40% speed in the opposite direction
-        if code == 311 and value == 0: # R1 released
-            arm_motor.brake()
+            # do something else
+        # for a full list of input codes, check out https://github.com/codeadamca/ev3-python-ps4
         
     # Set motor voltages. 
-    left_motor.dc(forward - left)
-    right_motor.dc(forward + left)
+    left_motor.dc(drive - steer)
+    right_motor.dc(drive + steer)
+    arm_motor.dc(arm)
 
     # Finally, read another event
     event = in_file.read(EVENT_SIZE)
