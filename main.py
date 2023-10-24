@@ -15,19 +15,24 @@ drive = 0
 steer = 0
 arm = 0
 
+# A drivebase allows for precise and easy control of the robot while acting autonomously
+# Read drivebase documentation linked in the README on github to correctly set the last 2 values
+robot = DriveBase(left_motor, right_motor, 50, 200)
+
+# Auto
+'''
+example:
+robot.straight(500) # drive 500mm foreward
+robot.stop()
+'''
+
 # A helper function for converting stick values (0 - 255)
 # to more usable numbers (-100 - 100)
-def scale(val, src, dst):
-    '''
-    Scale the given value from the scale of src to the scale of dst.
- 
-    val: float or int
-    src: tuple
-    dst: tuple
- 
-    example: print(scale(99, (0.0, 99.0), (-1.0, +1.0)))
-    '''
-    return (float(val-src[0]) / (src[1]-src[0])) * (dst[1]-dst[0])+dst[0]
+def scale(source, source_range, target_range):
+    # the function scales a range of values from source_range (typically 0-255) to target_range (for instance -100-100),
+    # where 0 is -100, 255 is 100, and all inbetween values are scaled porportionally
+    # example: scale(source(0,255), (-100-100))
+    return (float(source-source_range[0]) / (source_range[1]-source_range[0])) * (target_range[1]-target_range[0])+target_range[0]
 
 
 # Open the Gamepad event file:
@@ -56,10 +61,11 @@ while event:
             arm = -value / 2
     if ev_type == 1: # Button pressed
         if code == 310 and value == 1: # L1 pressed
+            print("L1 Pressed!")
             # do something
         if code == 310 and value == 0: # L1 released
             # do something else
-        # for a full list of input codes, check out https://github.com/codeadamca/ev3-python-ps4
+            print("L1 Released")
         
     # Set motor voltages. 
     left_motor.dc(drive - steer)
