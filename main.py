@@ -8,9 +8,9 @@ from pybricks.tools import print, wait, StopWatch
 import struct
 
 # Declare motors 
-left_motor = Motor(Port.A)
-right_motor = Motor(Port.B)
-arm_motor = Motor(Port.C)
+left_motor = Motor(Port.B)
+right_motor = Motor(Port.C)
+#arm_motor = Motor(Port.C)
 drive = 0
 steer = 0
 arm = 0
@@ -57,14 +57,16 @@ while event:
     if ev_type == 1: # Button pressed
         if code == 310 and value == 1: # L1 pressed
             # do something
+            print("L1 Press")
         if code == 310 and value == 0: # L1 released
             # do something else
+            print("L1 Release")
         # for a full list of input codes, check out https://github.com/codeadamca/ev3-python-ps4
         
     # Set motor voltages. 
     left_motor.dc(drive - steer)
     right_motor.dc(drive + steer)
-    arm_motor.dc(arm)
+    #arm_motor.dc(arm)
 
     # Finally, read another event
     event = in_file.read(EVENT_SIZE)
