@@ -4,6 +4,6 @@ For instructions on programming the drivebase, see the [pybricks documentation](
 # Controller button codes
 Coming soon. For now, check the sources section.
 # Sources and more info
-To see the original code, or a more detailed guide for connecting the controllers, see [antonsmindstorms.com](https://www.antonsmindstorms.com/2020/02/14/how-to-connect-a-ps4-dualshock-4-controller-to-your-mindstorms-ev3-brick-with-bluetooth/).\n
-More information about controller button codes is abailable [here](https://github.com/codeadamca/ev3-python-ps4#lego-mindstorms-ev3-pthon-and-a-ps4-controller).\n
+To see the original code, or a more detailed guide for connecting the controllers, see [antonsmindstorms.com](https://www.antonsmindstorms.com/2020/02/14/how-to-connect-a-ps4-dualshock-4-controller-to-your-mindstorms-ev3-brick-with-bluetooth/).
+More information about controller button codes is abailable [here](https://github.com/codeadamca/ev3-python-ps4#lego-mindstorms-ev3-pthon-and-a-ps4-controller).
 For more info about drivebases, see [this doc](https://docs.google.com/document/d/1rpNtUZS8Aor8wrZpCycvDiGADQ6NUlJ5iaD3Y8tqpQM/edit?usp=sharing).
