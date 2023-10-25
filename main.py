@@ -16,8 +16,8 @@ steer = 0
 arm = 0
 
 # A drivebase allows for precise and easy control of the robot while acting autonomously
-# Read drivebase documentation linked in the README on github to correctly set the last 2 values
-robot = DriveBase(left_motor, right_motor, 50, 200)
+# Read drivebase documentation linked in the README on github to correctly set the last value
+robot = DriveBase(left_motor, right_motor, 55, 200)
 
 # Auto
 '''
