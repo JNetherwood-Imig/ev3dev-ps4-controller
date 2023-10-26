@@ -10,7 +10,7 @@ import struct
 # Declare motors 
 left_motor = Motor(Port.B)
 right_motor = Motor(Port.C)
-#arm_motor = Motor(Port.C)
+arm_motor = Motor(Port.D)
 drive = 0
 steer = 0
 arm = 0
@@ -66,7 +66,7 @@ while event:
     # Set motor voltages. 
     left_motor.dc(drive - steer)
     right_motor.dc(drive + steer)
-    #arm_motor.dc(arm)
+    arm_motor.dc(arm)
 
     # Finally, read another event
     event = in_file.read(EVENT_SIZE)
