@@ -29,9 +29,9 @@ arm_speed = 1
 robot = DriveBase(left_motor, right_motor, 55.5, 121.5)
 
 # Drivebase settings
-# Arguments: straight speed: mm/s, straight acceleration: mm/s^2, turn rate: deg/s, turn acceleration: deg/s^2
+# Arguments: straight speed: mm/s, straight acceleration: mm/s^2
+# turn rate: deg/s, turn acceleration: deg/s^2
 robot.settings(500, 1000, 100, 100)
-
 
 ########
 # Auto #
@@ -45,32 +45,28 @@ robot.stop()
 # Setup #
 #########
 
-# A helper function for converting stick values (0 - 255)
-# to more usable numbers (-100 - 100)
+# the function scales a range of values from source_range (typically 0-255) to target_range (for instance -100-100),
+# where 0 is -100, 255 is 100, and all inbetween values are scaled porportionally
+# example: scale(source(0,255), (-100-100))
 def scale(source, source_range, target_range):
-    # the function scales a range of values from source_range (typically 0-255) to target_range (for instance -100-100),
-    # where 0 is -100, 255 is 100, and all inbetween values are scaled porportionally
-    # example: scale(source(0,255), (-100-100))
     return (float(source-source_range[0]) / (source_range[1]-source_range[0])) * (target_range[1]-target_range[0])+target_range[0]
-
 
 # Open the Gamepad event file:
 infile_path = "/dev/input/event4"
 
-# open file in binary mode
+# open file in read only mode
 in_file = open(infile_path, "rb")
 
 # Read from the file
 FORMAT = 'llHHI'    
 EVENT_SIZE = struct.calcsize(FORMAT)
-event = in_file.read(EVENT_SIZE)
 
 #############
 # Main loop #
 #############
 
-while event:
-    (tv_sec, tv_usec, ev_type, code, value) = struct.unpack(FORMAT, event)
+while True:
+    (tv_sec, tv_usec, ev_type, code, value) = struct.unpack(FORMAT, in_file.read(EVENT_SIZE))
     
     # Read analog stick values    
     if ev_type == 3: # Stick or trigger moved
@@ -94,8 +90,9 @@ while event:
     left_motor.dc(drive - steer)
     right_motor.dc(drive + steer)
     arm_motor.dc(arm * arm_speed)
-
-    # Finally, read another event
-    event = in_file.read(EVENT_SIZE)
+    
+    # If your robot is driving backwards due to motor orientation being different, try this:
+    # left_motor.dc(-(drive - steer))
+    # right_motor.dc(-(drive + steer))
 
 in_file.close()
