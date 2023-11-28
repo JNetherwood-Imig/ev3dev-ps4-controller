@@ -39,13 +39,23 @@ robot.settings(500, 1000, 100, 100)
 
 # Example
 robot.straight(2000) # drive 2000mm foreward
+# robot.turn(degrees) <-- Turn the robot by a specified number of degrees.
 robot.stop()
+# To raise and lower the arm, you can do something like this
+# arm_motor.run_angle(degrees) <-- Runs the arm motor for a specified number of degrees
+
+# For an intake based design, you can just constantly run a motor like this:
+# arm_motor.run(speed)
+# When you're ready to stop it:
+# arm_motor.stop()
+
+# For further info, read the pybricks documentation linked on the github page.
 
 #########
 # Setup #
 #########
 
-# the function scales a range of values from source_range (typically 0-255) to target_range (for instance -100-100),
+# This function scales a range of values from source_range (typically 0-255) to target_range (for instance -100-100),
 # where 0 is -100, 255 is 100, and all inbetween values are scaled porportionally
 # example: scale(source(0,255), (-100-100))
 def scale(source, source_range, target_range):
@@ -53,8 +63,6 @@ def scale(source, source_range, target_range):
 
 # Open the Gamepad event file:
 infile_path = "/dev/input/event4"
-
-# open file in read only mode
 in_file = open(infile_path, "rb")
 
 # Read from the file
@@ -79,11 +87,9 @@ while True:
         if code == 5: # Left trigger axis
             arm = -value / 2
     if ev_type == 1: # Button pressed
-        if code == 310 and value == 1: # L1 pressed
+        if code == 310 and value == 1:
             print("L1 Pressed!")
-            # do something
-        if code == 310 and value == 0: # L1 released
-            # do something else
+        if code == 310 and value == 0:
             print("L1 Released")
         
     # Set motor voltages. 
