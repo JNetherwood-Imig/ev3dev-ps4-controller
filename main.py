@@ -38,9 +38,18 @@ robot.settings(500, 1000, 100, 100)
 ########
 
 # Example
+
 robot.straight(2000) # drive 2000mm foreward
 # robot.turn(degrees) <-- Turn the robot by a specified number of degrees.
 robot.stop()
+
+# To make the program pause:
+# Add:
+# from time import sleep
+# at the top of the file
+# then use the sleep function
+# sleep(milliseconds)
+
 # To raise and lower the arm, you can do something like this
 # arm_motor.run_angle(degrees) <-- Runs the arm motor for a specified number of degrees
 

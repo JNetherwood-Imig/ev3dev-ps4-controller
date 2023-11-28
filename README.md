@@ -2,7 +2,8 @@
 When creating the drivebase object (robot = DriveBase(...)) there are 4 input fields. The first 2 specify the motors. They can be left as default because left_motor and right_motor are defined above.
 However, there are 2 more vaules: wheel_diameter and axle_track. The wheel diameter should be the same for all of the ev3 kits.
 The axle track, however, is unique to each robot. It is very important as it determines the robot's ability to turn a specified number of degrees. The axle track is the distance between the wheels. It should be measured in mm, as precisely as possible. Some experimentation may be required for getting optimal functionality. One way to test functionality is to make the robot turn 360 degrees and see how close it is to accurate.
-For instructions on programming the drivebase, see the [pybricks documentation](https://docs.pybricks.com/en/stable/robotics.html#pybricks.robotics.DriveBase).
+For instructions on programming the drivebase, see the [drivebase page](https://docs.pybricks.com/en/stable/robotics.html#pybricks.robotics.DriveBase) of the pybricks documentation.
+For information about moving individual motors, see the [motors page](https://docs.pybricks.com/en/stable/pupdevices/motor.html#pybricks.pupdevices.Motor).
 # Controller button codes
 | Event                      | Code | Possible Values | Description                 |
 | -------------------------- | ---- | --------------- | --------------------------- |
