@@ -57,7 +57,9 @@ robot.straight(-200) # drive 200 mm or 20cm backward
 # To raise and lower the arm, you can do something like this
 # arm_motor.run_angle(speed,degrees,then=Stop.HOLD, wait=True) # <-- Runs the arm motor for a specified number of degrees
 
+# move arm up
 # arm_motor.run_angle(500,90,then=Stop.HOLD, wait=True) 
+# move arm down
 # arm_motor.run_angle(500,-90,then=Stop.HOLD, wait=True) 
 
 # For an intake based design, you can just constantly run a motor like this:
