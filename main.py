@@ -42,13 +42,20 @@ drivebase.settings(500, 1000, 100, 100)
 # Example
 
 drivebase.straight(1000) # drive 1000mm foreward
+# drivebase.straight(-1000) # drive 1000mm backward
 # drivebase.turn(degrees) <-- Turn the robot by a specified number of degrees.
 
 # To make the program pause:
 # sleep(milliseconds)
 
 # To raise and lower the arm, you can do something like this
-# arm_motor.run_angle(speed, degrees) <-- Runs the arm motor for a specified number of degrees
+# arm_motor.run_angle(speed, degrees, then=stop.HOLD, wait=True) <-- Runs the arm motor for a specified number of degrees
+
+# Ex:
+# Arm up
+# arm_motor.run_angle(100, 90, then=stop.HOLD, wait=True)
+# Arm down
+# arm_motor.run_angle(100, -90, then=stop.HOLD, wait=True)
 
 # For an intake based design, you can just constantly run a motor like this:
 # arm_motor.run(speed)
