@@ -6,6 +6,8 @@ from pybricks.robotics import DriveBase
 
 import struct
 
+from time import sleep
+
 # Declare motors 
 left_motor = Motor(Port.A)
 right_motor = Motor(Port.B)
@@ -26,12 +28,12 @@ arm_speed = 1
 
 # A drivebase allows for precise and easy control of the robot while acting autonomously
 # Read drivebase documentation linked in the README on github to correctly set the last value
-robot = DriveBase(left_motor, right_motor, 55.5, 121.5)
+drivebase = DriveBase(left_motor, right_motor, 55.5, 121.5)
 
 # Drivebase settings
 # Arguments: straight speed: mm/s, straight acceleration: mm/s^2
 # turn rate: deg/s, turn acceleration: deg/s^2
-robot.settings(500, 1000, 100, 100)
+drivebase.settings(500, 1000, 100, 100)
 
 ########
 # Auto #
@@ -39,19 +41,14 @@ robot.settings(500, 1000, 100, 100)
 
 # Example
 
-robot.straight(2000) # drive 2000mm foreward
-# robot.turn(degrees) <-- Turn the robot by a specified number of degrees.
-robot.stop()
+drivebase.straight(1000) # drive 1000mm foreward
+# drivebase.turn(degrees) <-- Turn the robot by a specified number of degrees.
 
 # To make the program pause:
-# Add:
-# from time import sleep
-# at the top of the file
-# then use the sleep function
 # sleep(milliseconds)
 
 # To raise and lower the arm, you can do something like this
-# arm_motor.run_angle(degrees) <-- Runs the arm motor for a specified number of degrees
+# arm_motor.run_angle(speed, degrees) <-- Runs the arm motor for a specified number of degrees
 
 # For an intake based design, you can just constantly run a motor like this:
 # arm_motor.run(speed)
@@ -59,6 +56,10 @@ robot.stop()
 # arm_motor.stop()
 
 # For further info, read the pybricks documentation linked on the github page.
+
+# Do not remove this call to stop()
+# This is essential to allow the program to continue to the manual control section
+drivebase.stop()
 
 #########
 # Setup #
