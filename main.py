@@ -4,6 +4,7 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color, SoundFile
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 
+from time import sleep
 import struct
 
 # Declare motors 
@@ -31,6 +32,7 @@ robot = DriveBase(left_motor, right_motor, 55.5, 121.5)
 # Drivebase settings
 # Arguments: straight speed: mm/s, straight acceleration: mm/s^2
 # turn rate: deg/s, turn acceleration: deg/s^2
+# Maximum speed is 1050 for a drive motor and 1560 for an arm motor.
 robot.settings(500, 1000, 100, 100)
 
 ########
@@ -38,10 +40,12 @@ robot.settings(500, 1000, 100, 100)
 ########
 
 # Example
+# Maximum motor speed is 1050 for a drive motor and 1560 for an arm motor.
 
-robot.straight(2000) # drive 2000mm foreward
+robot.straight(200) # drive 200 mm or 20cm forward
+robot.straight(-200) # drive 200 mm or 20cm backward
 # robot.turn(degrees) <-- Turn the robot by a specified number of degrees.
-robot.stop()
+
 
 # To make the program pause:
 # Add:
@@ -51,13 +55,20 @@ robot.stop()
 # sleep(milliseconds)
 
 # To raise and lower the arm, you can do something like this
-# arm_motor.run_angle(degrees) <-- Runs the arm motor for a specified number of degrees
+# arm_motor.run_angle(speed,degrees,then=Stop.HOLD, wait=True) # <-- Runs the arm motor for a specified number of degrees
+
+# arm_motor.run_angle(500,90,then=Stop.HOLD, wait=True) 
+# arm_motor.run_angle(500,-90,then=Stop.HOLD, wait=True) 
 
 # For an intake based design, you can just constantly run a motor like this:
 # arm_motor.run(speed)
 # When you're ready to stop it:
 # arm_motor.stop()
 
+#THIS MUST BE THE LAST LINE OF YOUR AUTO SECTION
+robot.stop()
+
+robot.settings(500, 1000, 100, 100)
 # For further info, read the pybricks documentation linked on the github page.
 
 #########
