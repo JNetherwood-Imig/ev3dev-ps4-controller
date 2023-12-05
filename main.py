@@ -33,6 +33,8 @@ drivebase = DriveBase(left_motor, right_motor, 55.5, 121.5)
 # Drivebase settings
 # Arguments: straight speed: mm/s, straight acceleration: mm/s^2
 # turn rate: deg/s, turn acceleration: deg/s^2
+# IF THIS LINE FAILS WITH "INVALID ARGUMENT" THEN YOU HAVE A HARDWARE ISSUE
+# IT'S LIKELY A BAD MOTOR OR WIRE
 drivebase.settings(500, 1000, 100, 100)
 
 ########
