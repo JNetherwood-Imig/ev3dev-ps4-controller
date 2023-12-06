@@ -86,6 +86,11 @@ def scale(source, source_range, target_range):
 infile_path = "/dev/input/event4"
 in_file = open(infile_path, "rb")
 
+#If this error occurs on the above line try event5, event6, or event7 
+#OSError: [Errno 2] ENOENT
+----------
+#Exited with error code 1.
+
 # Read from the file
 FORMAT = 'llHHI'    
 EVENT_SIZE = struct.calcsize(FORMAT)
