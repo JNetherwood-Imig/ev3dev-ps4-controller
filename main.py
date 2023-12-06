@@ -68,8 +68,9 @@ drivebase.straight(100) # drive 100mm foreward
 
 # For further info, read the pybricks documentation linked on the github page.
 
-# Do not remove this call to stop()
+# Do not remove these call to stop()
 # This is essential to allow the program to continue to the manual control section
+arm_motor.stop()
 drivebase.stop()
 
 #########
