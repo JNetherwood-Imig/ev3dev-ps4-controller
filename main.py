@@ -29,12 +29,13 @@ arm_speed = 1
 # A drivebase allows for precise and easy control of the robot while acting autonomously
 # Read drivebase documentation linked in the README on github to correctly set the last value
 drivebase = DriveBase(left_motor, right_motor, 55.5, 121.5)
+# IF THE ABOVE LINE FAILS WITH "INVALID ARGUMENT" THEN YOU HAVE A HARDWARE ISSUE
+# IT'S LIKELY A BAD MOTOR OR WIRE
 
 # Drivebase settings
 # Arguments: straight speed: mm/s, straight acceleration: mm/s^2
 # turn rate: deg/s, turn acceleration: deg/s^2
-# IF THIS LINE FAILS WITH "INVALID ARGUMENT" THEN YOU HAVE A HARDWARE ISSUE
-# IT'S LIKELY A BAD MOTOR OR WIRE
+
 drivebase.settings(500, 1000, 100, 100)
 
 ########
