@@ -35,7 +35,7 @@ drivebase = DriveBase(left_motor, right_motor, 55.5, 121.5)
 # Drivebase settings
 # Arguments: straight speed: mm/s, straight acceleration: mm/s^2
 # turn rate: deg/s, turn acceleration: deg/s^2
-
+# if "console runner" error occurs on this line or any lines in the auto section stop the code on the brick using the back button
 drivebase.settings(500, 1000, 100, 100)
 
 ########
