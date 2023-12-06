@@ -6,7 +6,7 @@ from pybricks.robotics import DriveBase
 
 import struct
 
-from time import sleep
+
 
 # Declare motors 
 left_motor = Motor(Port.A)
