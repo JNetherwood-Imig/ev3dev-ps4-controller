@@ -49,7 +49,7 @@ drivebase.straight(100) # drive 100mm foreward
 # drivebase.turn(degrees) # Turn the robot by a specified number of degrees.
 
 # To make the program pause:
-# sleep(milliseconds)
+# wait(milliseconds)
 
 # To raise and lower the arm, you can do something like this
 # arm_motor.run_angle(speed, degrees, then=stop.HOLD, wait=True) # Runs the arm motor for a specified number of degrees
