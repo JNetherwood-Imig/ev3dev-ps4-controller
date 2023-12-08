@@ -6,21 +6,26 @@ from pybricks.robotics import DriveBase
 
 import struct
 
+EVENT_PATH = "/dev/input/event4"
 
+# If your robot is driving backwards due to motor orientation being different set DRIVE_DIRECTION to -1:
+DRIVE_DIRECTION = 1
+ARM_DIRECTION = 1
+
+# Arm speed is a value from 0-1 that is multiplied by the input value for the arm movement.
+# 1 is default, but you can lower it for better control. Example 0.5 runs at half speed, .75 at 3/4
+ARM_SPEED = 1
 
 # Declare motors 
-left_motor = Motor(Port.A)
-right_motor = Motor(Port.B)
-arm_motor = Motor(Port.C)
+left_motor = Motor(Port.B)
+right_motor = Motor(Port.C)
+arm_motor = Motor(Port.A)
 
 # Defining variables that will store the dc values for the motors
 drive = 0
 steer = 0
 arm = 0
 
-# Arm speed is a value from 0-1 that is multiplied by the input value for the arm movement.
-# 1 is default, but you can lower it for better control
-arm_speed = 1
 
 #############
 # Drivebase #
@@ -30,7 +35,7 @@ arm_speed = 1
 # Read drivebase documentation linked in the README on github to correctly set the last value
 drivebase = DriveBase(left_motor, right_motor, 55.5, 121.5)
 # IF THE ABOVE LINE FAILS WITH "INVALID ARGUMENT" THEN YOU HAVE A HARDWARE ISSUE
-# IT'S LIKELY A BAD MOTOR OR WIRE
+# IT'S LIKELY YOUR ARM AND DRIVE MOTORS ARE SWAPPED
 
 # Drivebase settings
 # Arguments: straight speed: mm/s, straight acceleration: mm/s^2
@@ -44,21 +49,21 @@ drivebase.settings(500, 1000, 100, 100)
 
 # Example
 
-drivebase.straight(100) # drive 100mm foreward
-# drivebase.straight(-100) # drive 100mm backward
+drivebase.straight(700) # drive 700mm foreward
+# drivebase.straight(-700) # drive 700mm backward
 # drivebase.turn(degrees) # Turn the robot by a specified number of degrees.
 
 # To make the program pause:
 # wait(milliseconds)
 
 # To raise and lower the arm, you can do something like this
-# arm_motor.run_angle(speed, degrees, then=stop.HOLD, wait=True) # Runs the arm motor for a specified number of degrees
+# arm_motor.run_angle(speed, degrees) # Runs the arm motor for a specified number of degrees
 
 # Ex:
 # Arm up
-# arm_motor.run_angle(100, 90, then=stop.HOLD, wait=True)
+# arm_motor.run_angle(300, 90)
 # Arm down
-# arm_motor.run_angle(100, -90, then=stop.HOLD, wait=True)
+# arm_motor.run_angle(30, -90)
 
 # For an intake based design, you can just constantly run a motor like this:
 # arm_motor.run(speed)
@@ -84,7 +89,7 @@ def scale(source, source_range, target_range):
     return (float(source-source_range[0]) / (source_range[1]-source_range[0])) * (target_range[1]-target_range[0])+target_range[0]
 
 # Open the Gamepad event file:
-infile_path = "/dev/input/event4"
+infile_path = EVENT_PATH
 in_file = open(infile_path, "rb")
 #Errors on the above line may also be caused by the controller not being turned on or connected
 # Read from the file
@@ -115,12 +120,10 @@ while True:
             print("L1 Released")
         
     # Set motor voltages. 
-    left_motor.dc(drive - steer)
-    right_motor.dc(drive + steer)
-    arm_motor.dc(arm * arm_speed)
-    
-    # If your robot is driving backwards due to motor orientation being different, try this:
-    # left_motor.dc(-(drive - steer))
-    # right_motor.dc(-(drive + steer))
+    left_motor.dc(DRIVE_DIRECTION * (drive - steer))
+    right_motor.dc(DRIVE_DIRECTION * (drive + steer))
+    arm_motor.dc(ARM_DIRECTION  * arm * ARM_SPEED)
+
+
 
 in_file.close()
