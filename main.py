@@ -6,7 +6,7 @@ from pybricks.robotics import DriveBase
 
 import struct
 
-from time import sleep
+
 
 # Declare motors 
 left_motor = Motor(Port.A)
@@ -28,13 +28,14 @@ arm_speed = 1
 
 # A drivebase allows for precise and easy control of the robot while acting autonomously
 # Read drivebase documentation linked in the README on github to correctly set the last value
-# IF THIS LINE FAILS WITH "INVALID ARGUMENT" THEN YOU HAVE A HARDWARE ISSUE
-# IT'S LIKELY A BAD MOTOR OR WIRE
 drivebase = DriveBase(left_motor, right_motor, 55.5, 121.5)
+# IF THE ABOVE LINE FAILS WITH "INVALID ARGUMENT" THEN YOU HAVE A HARDWARE ISSUE
+# IT'S LIKELY A BAD MOTOR OR WIRE
 
 # Drivebase settings
 # Arguments: straight speed: mm/s, straight acceleration: mm/s^2
 # turn rate: deg/s, turn acceleration: deg/s^2
+
 drivebase.settings(500, 1000, 100, 100)
 
 ########
@@ -48,7 +49,7 @@ drivebase.straight(100) # drive 100mm foreward
 # drivebase.turn(degrees) # Turn the robot by a specified number of degrees.
 
 # To make the program pause:
-# sleep(milliseconds)
+# wait(milliseconds)
 
 # To raise and lower the arm, you can do something like this
 # arm_motor.run_angle(speed, degrees, then=stop.HOLD, wait=True) # Runs the arm motor for a specified number of degrees
@@ -67,8 +68,9 @@ drivebase.straight(100) # drive 100mm foreward
 
 # For further info, read the pybricks documentation linked on the github page.
 
-# Do not remove this call to stop()
+# Do not remove these call to stop()
 # This is essential to allow the program to continue to the manual control section
+arm_motor.stop()
 drivebase.stop()
 
 #########
@@ -84,7 +86,7 @@ def scale(source, source_range, target_range):
 # Open the Gamepad event file:
 infile_path = "/dev/input/event4"
 in_file = open(infile_path, "rb")
-
+#Errors on the above line may also be caused by the controller not being turned on or connected
 # Read from the file
 FORMAT = 'llHHI'    
 EVENT_SIZE = struct.calcsize(FORMAT)
