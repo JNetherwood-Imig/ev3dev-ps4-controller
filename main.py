@@ -2,11 +2,12 @@
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
 from pybricks.parameters import (Port, Stop, Direction, Button, Color, SoundFile, ImageFile, Align)
 from pybricks.tools import print, wait, StopWatch
-from pybricks.robotics import DriveBase
+from pybricks.robotics import *
 
 import struct
 
-
+DRIVE_DIRECTION = 1
+ARM_DIRECTION = 1
 
 # Declare motors 
 left_motor = Motor(Port.A)
@@ -29,8 +30,8 @@ arm_speed = 1
 # A drivebase allows for precise and easy control of the robot while acting autonomously
 # Read drivebase documentation linked in the README on github to correctly set the last value
 drivebase = DriveBase(left_motor, right_motor, 55.5, 121.5)
-# IF THE ABOVE LINE FAILS WITH "INVALID ARGUMENT" THEN YOU HAVE A HARDWARE ISSUE
-# IT'S LIKELY A BAD MOTOR OR WIRE
+# If the drivebase declaration line fails with "INVALID ARGUMENT" then it is a hardware issue
+# Most likely a bad motor or wire
 
 # Drivebase settings
 # Arguments: straight speed: mm/s, straight acceleration: mm/s^2
@@ -44,7 +45,7 @@ drivebase.settings(500, 1000, 100, 100)
 
 # Example
 
-drivebase.straight(100) # drive 100mm foreward
+drivebase.straight(500) # drive 500mm foreward
 # drivebase.straight(-100) # drive 100mm backward
 # drivebase.turn(degrees) # Turn the robot by a specified number of degrees.
 
@@ -68,7 +69,7 @@ drivebase.straight(100) # drive 100mm foreward
 
 # For further info, read the pybricks documentation linked on the github page.
 
-# Do not remove these call to stop()
+# Do not remove these calls to stop()
 # This is essential to allow the program to continue to the manual control section
 arm_motor.stop()
 drivebase.stop()
@@ -86,7 +87,13 @@ def scale(source, source_range, target_range):
 # Open the Gamepad event file:
 infile_path = "/dev/input/event4"
 in_file = open(infile_path, "rb")
-#Errors on the above line may also be caused by the controller not being turned on or connected
+
+# If you recieve an OS Error 2 (OSError: [Errno 2] ENOENT), then the input event file "event4" does not exist
+# Make sure that the controller is connected, because the file does not exist when the controller is not connected
+# If it is still broken, ssh into the robot and run:
+# ls /dev/input/
+# to see available input files.
+
 # Read from the file
 FORMAT = 'llHHI'    
 EVENT_SIZE = struct.calcsize(FORMAT)
@@ -115,12 +122,8 @@ while True:
             print("L1 Released")
         
     # Set motor voltages. 
-    left_motor.dc(drive - steer)
-    right_motor.dc(drive + steer)
-    arm_motor.dc(arm * arm_speed)
-    
-    # If your robot is driving backwards due to motor orientation being different, try this:
-    # left_motor.dc(-(drive - steer))
-    # right_motor.dc(-(drive + steer))
+    left_motor.dc(DRIVE_DIRECTION * drive - steer)
+    right_motor.dc(DRIVE_DIRECTION * drive + steer)
+    arm_motor.dc(ARM_DIRECTION * arm * arm_speed)
 
 in_file.close()
