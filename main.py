@@ -1,7 +1,7 @@
 #!/usr/bin/env pybricks-micropython
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
-from pybricks.parameters import (Port, Stop, Direction, Button, Color, SoundFile, ImageFile, Align)
-from pybricks.tools import print, wait, StopWatch
+from pybricks.parameters import (Port, Stop, Direction, Button, Color)
+from pybricks.tools import  wait, StopWatch
 from pybricks.robotics import DriveBase
 
 import struct
@@ -49,7 +49,10 @@ drivebase.settings(500, 1000, 100, 100)
 
 # Example
 
-drivebase.straight(700) # drive 700mm foreward
+drivebase.straight(700,then=Stop.BRAKE, wait=False) # drive 700mm foreward
+arm_motor.run_angle(300, 90, then=Stop.BRAKE, wait=False)
+wait(5000)
+arm_motor.stop()
 # drivebase.straight(-700) # drive 700mm backward
 # drivebase.turn(degrees) # Turn the robot by a specified number of degrees.
 
@@ -61,7 +64,7 @@ drivebase.straight(700) # drive 700mm foreward
 
 # Ex:
 # Arm up
-# arm_motor.run_angle(300, 90)
+# arm_motor.run_angle(300, 90,then=Stop.BRAKE, wait=True)
 # Arm down
 # arm_motor.run_angle(30, -90)
 
