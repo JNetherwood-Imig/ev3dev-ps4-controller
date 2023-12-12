@@ -27,59 +27,37 @@ steer = 0
 arm = 0
 
 
-#############
-# Drivebase #
-#############
-
-# A drivebase allows for precise and easy control of the robot while acting autonomously
-# Read drivebase documentation linked in the README on github to correctly set the last value
-drivebase = DriveBase(left_motor, right_motor, 55.5, 121.5)
-# IF THE ABOVE LINE FAILS WITH "INVALID ARGUMENT" THEN YOU HAVE A HARDWARE ISSUE
-# IT'S LIKELY YOUR ARM AND DRIVE MOTORS ARE SWAPPED
-
-# Drivebase settings
-# Arguments: straight speed: mm/s, straight acceleration: mm/s^2
-# turn rate: deg/s, turn acceleration: deg/s^2
-
-drivebase.settings(500, 1000, 100, 100)
-
 ########
 # Auto #
 ########
 
-# Example
+def auto():
+    # Example
+    #Maximum speed is 1050 for a large (drive) motor and 1560 for a medium (arm/intake) motor.
 
-drivebase.straight(700,then=Stop.BRAKE, wait=False) # drive 700mm foreward
-arm_motor.run_angle(300, 90, then=Stop.BRAKE, wait=False)
-wait(5000)
-arm_motor.stop()
-# drivebase.straight(-700) # drive 700mm backward
-# drivebase.turn(degrees) # Turn the robot by a specified number of degrees.
+    #put arm down
+    arm_motor.dc(-100) # 0-100 percent speed
+    wait(100) #1/4 second
+    arm_motor.stop()
+   
+    left_motor.dc(100) # drive backward # 0-100 percent speed
+    right_motor.dc(95) # run right motor slower to correct turn
+    wait(1500) #1.5 seconds
 
-# To make the program pause:
-# wait(milliseconds)
+    left_motor.dc(-100) # drive backward
+    right_motor.dc(-95) # run right motor slower to correct turn
+    wait(1500) #1.5 seconds
 
-# To raise and lower the arm, you can do something like this
-# arm_motor.run_angle(speed, degrees) # Runs the arm motor for a specified number of degrees
+    #put arm up
+    arm_motor.dc(100)
+    wait(100)
+    arm_motor.stop()
 
-# Ex:
-# Arm up
-# arm_motor.run_angle(300, 90,then=Stop.BRAKE, wait=True)
-# Arm down
-# arm_motor.run_angle(30, -90)
+    #leave these commands 
+    arm_motor.stop()
+    left_motor.stop()
+    right_motor.stop()
 
-# For an intake based design, you can just constantly run a motor like this:
-# arm_motor.run(speed)
-# Use a negative speed to run it backwards
-# When you're ready to stop it:
-# arm_motor.stop()
-
-# For further info, read the pybricks documentation linked on the github page.
-
-# Do not remove these call to stop()
-# This is essential to allow the program to continue to the manual control section
-arm_motor.stop()
-drivebase.stop()
 
 #########
 # Setup #
@@ -105,9 +83,10 @@ EVENT_SIZE = struct.calcsize(FORMAT)
 
 while True:
     (tv_sec, tv_usec, ev_type, code, value) = struct.unpack(FORMAT, in_file.read(EVENT_SIZE))
-    
+    #print(ev_type,code,value)
     # Read analog stick values    
     if ev_type == 3: # Stick or trigger moved
+        
         if code == 1: # Left stick y axis
             drive = scale(value, (0,255), (100,-100)) # Scale input from 0-255 to -100-100 for the motor
         if code == 3: # Right stick x axis
@@ -116,17 +95,19 @@ while True:
             arm = value / 2
         if code == 5: # Left trigger axis
             arm = -value / 2
+
     if ev_type == 1: # Button pressed
         if code == 310 and value == 1:
             print("L1 Pressed!")
         if code == 310 and value == 0:
             print("L1 Released")
-        
+        if code == 305:
+            print("Red Circle")
+            auto()
+    
     # Set motor voltages. 
     left_motor.dc(DRIVE_DIRECTION * (drive - steer))
     right_motor.dc(DRIVE_DIRECTION * (drive + steer))
     arm_motor.dc(ARM_DIRECTION  * arm * ARM_SPEED)
-
-
 
 in_file.close()
