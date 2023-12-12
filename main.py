@@ -20,7 +20,7 @@ ARM_SPEED = 1
 left_motor = Motor(Port.B)
 right_motor = Motor(Port.C)
 arm_motor = Motor(Port.A)
-
+autodone = False
 # Defining variables that will store the dc values for the motors
 drive = 0
 steer = 0
@@ -35,18 +35,21 @@ def auto():
     # Example
     #Maximum speed is 1050 for a large (drive) motor and 1560 for a medium (arm/intake) motor.
 
+
+    # drive forward # 0-100 percent speed
+    left_motor.dc(100) 
+    right_motor.dc(95) # run right motor slower to correct turn
+    wait(1700) #1.5 seconds
+
     #put arm down
     arm_motor.dc(-100) # 0-100 percent speed
     wait(100) #1/4 second
     arm_motor.stop()
-   
-    left_motor.dc(100) # drive backward # 0-100 percent speed
-    right_motor.dc(95) # run right motor slower to correct turn
-    wait(1500) #1.5 seconds
 
+    # drive backward # 0-100 percent speed
     left_motor.dc(-100) # drive backward
     right_motor.dc(-95) # run right motor slower to correct turn
-    wait(1500) #1.5 seconds
+    wait(1700) #1.5 seconds
 
     #put arm up
     arm_motor.dc(100)
@@ -103,7 +106,10 @@ while True:
             print("L1 Released")
         if code == 305:
             print("Red Circle")
-            auto()
+            if autodone == False:
+                auto()
+                autodone = True
+
     
     # Set motor voltages. 
     left_motor.dc(DRIVE_DIRECTION * (drive - steer))
