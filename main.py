@@ -113,8 +113,9 @@ def scale(source, source_range, target_range):
 
 # Open the Gamepad event file:
 infile_path = EVENT_PATH
+
+#EONET Errors on the next line may also be caused by the controller not being turned on or connected
 in_file = open(infile_path, "rb")
-#Errors on the above line may also be caused by the controller not being turned on or connected
 # Read from the file
 FORMAT = 'llHHI'    
 EVENT_SIZE = struct.calcsize(FORMAT)
