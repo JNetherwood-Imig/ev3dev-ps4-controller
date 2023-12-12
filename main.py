@@ -2,15 +2,21 @@
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
 from pybricks.parameters import (Port, Stop, Direction, Button, Color)
 from pybricks.tools import  wait, StopWatch
-from pybricks.robotics import DriveBase
 
 import struct
+
+ARM = 1
+INTAKE = 2
+
+
 
 EVENT_PATH = "/dev/input/event4"
 
 # If your robot is driving backwards due to motor orientation being different set DRIVE_DIRECTION to -1:
 DRIVE_DIRECTION = 1
 ARM_DIRECTION = 1
+
+
 
 # Arm speed is a value from 0-1 that is multiplied by the input value for the arm movement.
 # 1 is default, but you can lower it for better control. Example 0.5 runs at half speed, .75 at 3/4
@@ -30,16 +36,17 @@ arm = 0
 ########
 # Auto #
 ########
+#enter ARM or INTAKE 
+BALL_GRABBER_TYPE = ARM
 
-def auto():
+def auto_arm():
     # Example
     #Maximum speed is 1050 for a large (drive) motor and 1560 for a medium (arm/intake) motor.
 
-
     # drive forward # 0-100 percent speed
     left_motor.dc(100) 
-    right_motor.dc(95) # run right motor slower to correct turn
-    wait(1700) #1.5 seconds
+    right_motor.dc(100) # run right motor slower to correct turn
+    wait(2500) #2.5 seconds
 
     #put arm down
     arm_motor.dc(-100) # 0-100 percent speed
@@ -48,8 +55,8 @@ def auto():
 
     # drive backward # 0-100 percent speed
     left_motor.dc(-100) # drive backward
-    right_motor.dc(-95) # run right motor slower to correct turn
-    wait(1700) #1.5 seconds
+    right_motor.dc(-100) # run right motor slower to correct turn
+    wait(2500) #2.5 seconds
 
     #put arm up
     arm_motor.dc(100)
@@ -60,6 +67,33 @@ def auto():
     arm_motor.stop()
     left_motor.stop()
     right_motor.stop()
+
+
+def auto_intake():
+    # Example
+    #Maximum speed is 1050 for a large (drive) motor and 1560 for a medium (arm/intake) motor.
+
+    #run arm motor
+    arm_motor.dc(100) # 0-100 percent speed
+
+    # drive forward # 0-100 percent speed
+    left_motor.dc(100) 
+    right_motor.dc(100) # run right motor slower to correct turn
+    wait(2500) #2.5 seconds
+
+    # drive backward # 0-100 percent speed
+    left_motor.dc(-100) # drive backward
+    right_motor.dc(-100) # run right motor slower to correct turn
+    wait(2500) #2.5 seconds
+
+
+    #leave these commands 
+    arm_motor.stop()
+    left_motor.stop()
+    right_motor.stop()
+
+
+
 
 
 #########
@@ -107,7 +141,10 @@ while True:
         if code == 305:
             print("Red Circle")
             if autodone == False:
-                auto()
+                if BALL_GRABBER_TYPE == INTAKE:
+                    auto_intake()
+                if BALL_GRABBER_TYPE == ARM:
+                    auto_arm()
                 autodone = True
 
     
