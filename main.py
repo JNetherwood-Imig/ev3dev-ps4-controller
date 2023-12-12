@@ -16,11 +16,9 @@ EVENT_PATH = "/dev/input/event4"
 DRIVE_DIRECTION = 1
 ARM_DIRECTION = 1
 
-
-
 # Arm speed is a value from 0-1 that is multiplied by the input value for the arm movement.
 # 1 is default, but you can lower it for better control. Example 0.5 runs at half speed, .75 at 3/4
-ARM_SPEED = 1
+ARM_SPEED = 1   
 
 # Declare motors 
 left_motor = Motor(Port.B)
@@ -33,12 +31,16 @@ steer = 0
 arm = 0
 
 
-########
-# Auto #
-########
-#enter ARM or INTAKE 
+################
+#     AUTO     #
+################
+#Enter ARM or INTAKE 
 BALL_GRABBER_TYPE = ARM
 
+
+################
+#   ARM ROBOT  #
+################
 def auto_arm():
     # Example
     #Maximum speed is 1050 for a large (drive) motor and 1560 for a medium (arm/intake) motor.
@@ -68,6 +70,9 @@ def auto_arm():
     left_motor.stop()
     right_motor.stop()
 
+################
+#    INTAKE    #
+################
 
 def auto_intake():
     # Example
@@ -139,7 +144,7 @@ while True:
         if code == 310 and value == 0:
             print("L1 Released")
         if code == 305:
-            print("Red Circle")
+            #print("Red Circle")
             if autodone == False:
                 if BALL_GRABBER_TYPE == INTAKE:
                     auto_intake()
