@@ -8,8 +8,6 @@ import struct
 ARM = 1
 INTAKE = 2
 
-
-
 EVENT_PATH = "/dev/input/event4"
 
 # If your robot is driving backwards due to motor orientation being different set DRIVE_DIRECTION to -1:
@@ -34,7 +32,7 @@ arm = 0
 ################
 #     AUTO     #
 ################
-#Enter ARM or INTAKE 
+#Enter  = ARM or = INTAKE 
 BALL_GRABBER_TYPE = ARM
 
 
@@ -96,8 +94,6 @@ def auto_intake():
     arm_motor.stop()
     left_motor.stop()
     right_motor.stop()
-
-
 
 
 
