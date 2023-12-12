@@ -48,7 +48,7 @@ def auto_arm():
     # drive forward # 0-100 percent speed
     left_motor.dc(100) 
     right_motor.dc(100) # run right motor slower to correct turn
-    wait(2500) #2.5 seconds
+    wait(2200) #2.5 seconds
 
     #put arm down
     arm_motor.dc(-100) # 0-100 percent speed
@@ -58,7 +58,7 @@ def auto_arm():
     # drive backward # 0-100 percent speed
     left_motor.dc(-100) # drive backward
     right_motor.dc(-100) # run right motor slower to correct turn
-    wait(2500) #2.5 seconds
+    wait(2200) #2.5 seconds
 
     #put arm up
     arm_motor.dc(100)
@@ -84,12 +84,12 @@ def auto_intake():
     # drive forward # 0-100 percent speed
     left_motor.dc(100) 
     right_motor.dc(100) # run right motor slower to correct turn
-    wait(2500) #2.5 seconds
+    wait(2200) #2.5 seconds
 
     # drive backward # 0-100 percent speed
     left_motor.dc(-100) # drive backward
     right_motor.dc(-100) # run right motor slower to correct turn
-    wait(2500) #2.5 seconds
+    wait(2200) #2.5 seconds
 
 
     #leave these commands 
