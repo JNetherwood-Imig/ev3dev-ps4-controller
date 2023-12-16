@@ -3,6 +3,7 @@ from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor
 from pybricks.parameters import (Port, Stop, Direction, Button, Color)
 from pybricks.tools import  wait, StopWatch
 
+from pybricks import version
 import struct
 
 ARM = 1
@@ -27,7 +28,7 @@ autodone = False
 drive = 0
 steer = 0
 arm = 0
-
+print(version)
 
 ################
 #     AUTO     #
@@ -42,7 +43,8 @@ BALL_GRABBER_TYPE = ARM
 def auto_arm():
     # Example
     #Maximum speed is 1050 for a large (drive) motor and 1560 for a medium (arm/intake) motor.
-
+    arm_motor.run_until_stalled(300, then=Stop.COAST, duty_limit=None)
+    wait(2200) #2.5 seconds
     # drive forward # 0-100 percent speed
     left_motor.dc(100) 
     right_motor.dc(100) # run right motor slower to correct turn
