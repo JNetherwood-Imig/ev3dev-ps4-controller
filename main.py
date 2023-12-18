@@ -1,10 +1,12 @@
 #!/usr/bin/env pybricks-micropython
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
-from pybricks.parameters import (Port, Stop, Direction, Button, Color, SoundFile, ImageFile, Align)
-from pybricks.tools import print, wait, StopWatch
-from pybricks.robotics import *
+from pybricks.parameters import (Port, Stop, Direction, Button, Color)
+from pybricks.tools import wait, StopWatch
 
 import struct
+
+ARM = 1
+INTAKE = 2
 
 DRIVE_DIRECTION = 1
 ARM_DIRECTION = 1
@@ -19,60 +21,58 @@ drive = 0
 steer = 0
 arm = 0
 
-# Arm speed is a value from 0-1 that is multiplied by the input value for the arm movement.
-# 1 is default, but you can lower it for better control
-arm_speed = 1
-
-#############
-# Drivebase #
-#############
-
-# A drivebase allows for precise and easy control of the robot while acting autonomously
-# Read drivebase documentation linked in the README on github to correctly set the last value
-drivebase = DriveBase(left_motor, right_motor, 55.5, 121.5)
-# If the drivebase declaration line fails with "INVALID ARGUMENT" then it is a hardware issue
-# Most likely a bad motor or wire
-
-# Drivebase settings
-# Arguments: straight speed: mm/s, straight acceleration: mm/s^2
-# turn rate: deg/s, turn acceleration: deg/s^2
-
-drivebase.settings(500, 1000, 100, 100)
-
 ########
 # Auto #
 ########
 
-# Example
+# Specify ARM or INTAKE depending on which you are using
+robot_type = ARM
 
-drivebase.straight(500) # drive 500mm foreward
-# drivebase.straight(-100) # drive 100mm backward
-# drivebase.turn(degrees) # Turn the robot by a specified number of degrees.
+def auto_arm():
+    # Run both motors for 2 seconds
+    left_motor.dc(100)
+    right_motor.dc(100)
+    wait(2000)
+    # Stop both motors
+    left_motor.brake()
+    right_motor.brake()
+    # Rotate arm motor 90 degrees
+    arm_motor.dc(-50)
+    wait(500)
+    arm_motor.stop()
+    # Drive backwards for 2 seconds
+    left_motor.dc(-100)
+    right_motor.dc(-100)
+    wait(2000)
+    # Stop both motors
+    left_motor.brake()
+    right_motor.brake()
+    # Rotate arm motor 90 degrees
+    arm_motor.dc(50)
+    wait(500)
+    arm_motor.stop()
 
-# To make the program pause:
-# wait(milliseconds)
-
-# To raise and lower the arm, you can do something like this
-# arm_motor.run_angle(speed, degrees, then=stop.HOLD, wait=True) # Runs the arm motor for a specified number of degrees
-
-# Ex:
-# Arm up
-# arm_motor.run_angle(100, 90, then=stop.HOLD, wait=True)
-# Arm down
-# arm_motor.run_angle(100, -90, then=stop.HOLD, wait=True)
-
-# For an intake based design, you can just constantly run a motor like this:
-# arm_motor.run(speed)
-# Use a negative speed to run it backwards
-# When you're ready to stop it:
-# arm_motor.stop()
-
-# For further info, read the pybricks documentation linked on the github page.
-
-# Do not remove these calls to stop()
-# This is essential to allow the program to continue to the manual control section
-arm_motor.stop()
-drivebase.stop()
+def auto_intake():
+    # Start intake
+    arm_motor.dc(100)
+    # Run both motors for 2.5 seconds
+    left_motor.dc(100)
+    right_motor.dc(100)
+    wait(2500)
+    # Stop both motors
+    left_motor.brake()
+    right_motor.brake()
+    # Wait 0.5 seconds while the intake picks up balls
+    wait(500)
+    # Drive backwards for 2.5 seconds
+    left_motor.dc(-100)
+    left_motor.dc(-100)
+    wait(2500)
+    # Stop both motors
+    left_motor.stop()
+    right_motor.stop()
+    # Stop intake
+    arm_motor.stop()
 
 #########
 # Setup #
@@ -86,13 +86,14 @@ def scale(source, source_range, target_range):
 
 # Open the Gamepad event file:
 infile_path = "/dev/input/event4"
-in_file = open(infile_path, "rb")
 
-# If you recieve an OS Error 2 (OSError: [Errno 2] ENOENT), then the input event file "event4" does not exist
-# Make sure that the controller is connected, because the file does not exist when the controller is not connected
-# If it is still broken, ssh into the robot and run:
-# ls /dev/input/
-# to see available input files.
+try:
+    in_file = open(infile_path, "rb")
+    controller_connected = True
+except:
+    print("Error accessing controller. Make sure your controller is turned on and connected.")
+    controller_connected = False
+
 
 # Read from the file
 FORMAT = 'llHHI'    
@@ -102,7 +103,7 @@ EVENT_SIZE = struct.calcsize(FORMAT)
 # Main loop #
 #############
 
-while True:
+while controller_connected:
     (tv_sec, tv_usec, ev_type, code, value) = struct.unpack(FORMAT, in_file.read(EVENT_SIZE))
     
     # Read analog stick values    
@@ -116,14 +117,23 @@ while True:
         if code == 5: # Left trigger axis
             arm = -value / 2
     if ev_type == 1: # Button pressed
-        if code == 310 and value == 1:
-            print("L1 Pressed!")
-        if code == 310 and value == 0:
-            print("L1 Released")
+        if code == 305 and value == 1:
+            if robot_type == ARM:
+                auto_arm()
+            elif robot_type == INTAKE:
+                auto_intake()
+            else:
+                print("Invalid robot type. Please specify either ARM or INTAKE")
         
+        # use square button to stop code (useful when testing)
+        # if code == 308 and value == 1:
+        #     print("Stopping")
+        #     break
+            
     # Set motor voltages. 
     left_motor.dc(DRIVE_DIRECTION * drive - steer)
     right_motor.dc(DRIVE_DIRECTION * drive + steer)
-    arm_motor.dc(ARM_DIRECTION * arm * arm_speed)
+    arm_motor.dc(ARM_DIRECTION * arm)
 
-in_file.close()
+if controller_connected:
+    in_file.close()
