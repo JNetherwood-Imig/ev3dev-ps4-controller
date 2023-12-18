@@ -125,7 +125,7 @@ while controller_connected:
             else:
                 print("Invalid robot type. Please specify either ARM or INTAKE")
         
-        # use square button to stop code (useful when testing)
+        # Use square button to stop code (useful when testing)
         # if code == 308 and value == 1:
         #     print("Stopping")
         #     break
