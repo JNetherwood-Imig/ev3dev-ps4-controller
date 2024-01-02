@@ -28,6 +28,8 @@ arm = 0
 # Specify ARM or INTAKE depending on which you are using
 robot_type = ARM
 
+
+
 def auto_arm():
     # Run both motors for 2 seconds
     left_motor.dc(100)
