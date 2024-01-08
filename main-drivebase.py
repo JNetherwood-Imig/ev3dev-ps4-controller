@@ -5,6 +5,7 @@ from pybricks.tools import wait
 
 from drivebase import Drivebase
 import struct
+import io
 
 # Declare motors 
 left_motor = Motor(Port.A)
@@ -51,26 +52,51 @@ def auto(intake):
 def scale(source, source_range, target_range):
     return (float(source-source_range[0]) / (source_range[1]-source_range[0])) * (target_range[1]-target_range[0])+target_range[0]
 
-# Open the Gamepad event file:
-infile_path = "/dev/input/event4"
+# Open the Gamepad event file
+DATA_FORMAT = 'llHHI'    
+EVENT_SIZE = struct.calcsize(DATA_FORMAT)
 
-try:
-    in_file = open(infile_path, "rb")
-    controller_connected = True
-except:
+# Function to test various files to detect the correct one for inputs
+def try_infile(file_num):
+    infile_path = "/dev/input/event" + str(file_num)
+
+    global in_file
+    try:
+        in_file = open(infile_path, "rb")
+        for i in range(100):
+            (tv_sec, tv_usec, ev_type, code, value) = struct.unpack(DATA_FORMAT, in_file.read(EVENT_SIZE))
+            # Check if values are unreasonably large
+            # This suggests that the open file is incorrect
+            if ev_type == 3 and (value > 256 or value < -256):
+                return False
+        # Found correct file
+        print("Controller connected!")
+        print("Input file is ", infile_path)
+        return True
+    except:
+        return False
+
+# Test all files from /dev/input/event3 to event5
+file_nums = [ 3, 4, 5 ]
+success = False
+for i in file_nums:
+    # If the try infile function returns True
+    # then the expression evaluates to true and the loop breaks at the current (correct) file
+    if try_infile(i):
+        success = True
+        break
+
+# If the whole process fails, print an error message and quit the program
+if not success:
     print("Error accessing controller. Make sure your controller is turned on and connected.")
-    controller_connected = False
-
-# Read from the file
-FORMAT = 'llHHI'    
-EVENT_SIZE = struct.calcsize(FORMAT)
+    quit()
 
 #############
 # Main loop #
 #############
 
-while controller_connected:
-    (tv_sec, tv_usec, ev_type, code, value) = struct.unpack(FORMAT, in_file.read(EVENT_SIZE))
+while True:
+    (tv_sec, tv_usec, ev_type, code, value) = struct.unpack(DATA_FORMAT, in_file.read(EVENT_SIZE))
     
     # Read analog stick values    
     if ev_type == 3: # Stick or trigger moved
