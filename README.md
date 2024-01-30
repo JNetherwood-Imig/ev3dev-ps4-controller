@@ -6,7 +6,7 @@ The wheel diameter should not need to be changed unless the wheels are modified,
 NOTES\
 The speed values are arbitrary and do not have defined units\
 All functions are called in the form of: drivebase_name.function_name()\
-
+\
 move(speed) -> drives at a given speed until stop is called\
 move_distance(distance, speed) -> drives for a given amount of millimeters at a given speed\
 turn(speed) -> spins around at a given speed until stop is called\
@@ -18,7 +18,7 @@ stop_intake()\
 \
 raise_arm()\
 lower_arm()\
-
+\
 drive() -> This function is only used the main file as it just drives the robot using the controller input\
 
 # Controller button codes
