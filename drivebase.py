@@ -15,7 +15,7 @@ def run_angle_until_stalled(motor, speed, angle):
     while True:
         # Motor stalled
         if motor.stalled():
-]            motor.stop()
+            motor.stop()
             break
         # Instruction finished successfully
         elif motor.done():
@@ -80,12 +80,11 @@ class Drivebase:
     
     # Raise arm (might need to be tweaked to use correct rotation angle)
     def raise_arm(self):
-        # Change the 180 to specify how far to rotate the arm motor to raise and lower the arm
-        run_angle_until_stalled(self.arm_motor, 200, 180)
+        self.arm_motor.run_until_stalled(200, then=Stop.COAST, duty_limit=None)
     
     # Lower arm (same value might need to be changed)
     def lower_arm(self):
-        run_angle_until_stalled(self.arm_motor, 200, -180)
+        self.arm_motor.run_until_stalled(-200, then=Stop.COAST, duty_limit=None)
     
     # Drive the drivebase using controller inputs
     def drive(self, drive_speed, turn_speed, arm_power):
