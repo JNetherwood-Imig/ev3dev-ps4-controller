@@ -5,7 +5,7 @@ The wheel diameter should not need to be changed unless the wheels are modified,
 ## Drivebase commands
    >[!NOTE]
    >The speed values are arbitrary and do not have defined units\
-   >All functions are called in the form of: `drivebase_name.function_name()`\
+   >All functions are called in the form of: `drivebase_name.function_name()`
 
 ### move(speed)
 Drives at a given speed until stop is called
