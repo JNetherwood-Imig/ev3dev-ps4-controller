@@ -77,7 +77,7 @@ class Drivebase:
         
     # Start the intake for an intake based robot
     def start_intake(self, reversed):
-        self.arm_motor.dc(500 if reversed == False else -500)
+        self.arm_motor.dc(100 if reversed == False else -100)
      
     # Stop the intake   
     def stop_intake(self):
