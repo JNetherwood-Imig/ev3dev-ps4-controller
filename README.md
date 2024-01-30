@@ -19,7 +19,7 @@ stop_intake()\
 raise_arm()\
 lower_arm()\
 \
-drive() -> This function is only used the main file as it just drives the robot using the controller input\
+drive() -> This function is only used the main file as it just drives the robot using the controller input
 
 # Controller button codes
 | Event                      | Code | Possible Values | Description                 |
