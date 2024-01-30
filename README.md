@@ -2,24 +2,27 @@
 In the auto.py file is a drivebase object which is created near the top. This should be created with parameters that match your robot.
 The wheel diameter should not need to be changed unless the wheels are modified, but the axle track is important. It represents the distance between the two weels. To get an accurate value, measure from the middle of one wheel to the middle of the other.
 
-# Possible drivebase commands:
-NOTES\
-The speed values are arbitrary and do not have defined units\
-All functions are called in the form of: drivebase_name.function_name()\
-\
-move(speed) -> drives at a given speed until stop is called\
-move_distance(distance, speed) -> drives for a given amount of millimeters at a given speed\
-turn(speed) -> spins around at a given speed until stop is called\
-turn_angle(angle, speed) -> turns at a given speed and stops after a given number of degrees\
-stop() -> stops the robot\
-\
-start_intake()\
-stop_intake()\
-\
-raise_arm()\
-lower_arm()\
-\
-drive() -> This function is only used the main file as it just drives the robot using the controller input
+## Drivebase commands
+   >[!NOTE]
+   >The speed values are arbitrary and do not have defined units\
+   >All functions are called in the form of: `drivebase_name.function_name()`\
+
+### move(speed)
+Drives at a given speed until stop is called
+### move_distance(distance, speed)
+Drives for a given amount of millimeters at a given speed
+### turn(speed)
+Spins around at a given speed until stop is called
+### turn_angle(angle, speed)
+Turns at a given speed and stops after a given number of degrees
+### stop()
+Stops the robot
+### start_intake()
+### stop_intake()
+### raise_arm()
+### lower_arm()
+### drive()
+This function is only used the main file as it just drives the robot using the controller input
 
 # Controller button codes
 | Event                      | Code | Possible Values | Description                 |

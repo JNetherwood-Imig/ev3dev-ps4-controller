@@ -69,6 +69,11 @@ class Drivebase:
 		self.left_motor.run_angle(speed, degrees, wait=False)
 		self.right_motor.run_angle(speed, -degrees, wait=False)
 		check_stalled(self.left_motor)
+  
+  # Stop the drivebase
+  def stop(self):
+      self.left_motor.stop()
+      self.right_motor.stop()
         
     # Start the intake for an intake based robot
     def start_intake(self, speed):
