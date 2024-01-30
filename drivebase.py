@@ -76,20 +76,24 @@ class Drivebase:
       self.right_motor.stop()
         
     # Start the intake for an intake based robot
-    def start_intake(self, speed):
-        self.arm_motor.dc(speed)
+    def start_intake(self, reversed):
+        self.arm_motor.dc(500 if reversed == False else -500)
      
     # Stop the intake   
-    def stop_intake(self, speed):
+    def stop_intake(self):
         self.arm_motor.stop()
     
     # Raise arm (might need to be tweaked to use correct rotation angle)
-    def raise_arm(self):
-        self.arm_motor.run_until_stalled(200, then=Stop.COAST, duty_limit=None)
+    def raise_arm(self, reversed):
+        self.arm_motor.run_until_stalled(200 if reversed == False else -200,
+                                         then=Stop.COAST,
+                                         duty_limit=None)
     
     # Lower arm (same value might need to be changed)
-    def lower_arm(self):
-        self.arm_motor.run_until_stalled(-200, then=Stop.COAST, duty_limit=None)
+    def lower_arm(self, reversed):
+        self.arm_motor.run_until_stalled(-200 if reversed == False else 200,
+                                         then=Stop.COAST,
+                                         duty_limit=None)
     
     # Drive the drivebase using controller inputs
     def drive(self, drive_speed, turn_speed, arm_power):

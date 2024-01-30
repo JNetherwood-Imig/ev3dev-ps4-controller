@@ -17,10 +17,14 @@ Spins around at a given speed until stop is called
 Turns at a given speed and stops after a given number of degrees
 ### stop()
 Stops the robot
-### start_intake()
+### start_intake(reversed=True/False)
+Starts the intake and takes a boolean to specify if the direction should be reversed
 ### stop_intake()
-### raise_arm()
-### lower_arm()
+Stops the intake
+### raise_arm(reversed=True/False)
+Raises the arm until the motor stalls and takes a boolean for reversing the direction
+### lower_arm(reversed=True/False)
+Lowers the arm until the motor stalls and takes a boolean for reversing the direction
 ### drive()
 This function is only used the main file as it just drives the robot using the controller input
 

@@ -17,10 +17,10 @@ drivebase = Drivebase(
     right_motor,        # right motor
     arm_motor,          # arm motor
     55,                 # wheel diameter (mm)
-    121)                # axle track     (mm)
+    121)                # axle track (mm)
 
 def auto():
     drivebase.move_distance(300, 500) # Drives for 300mm at a speed of 500
-    drivebase.lower_arm()
+    drivebase.lower_arm(reversed=False)
     drivebase.move_distance(-300, 500) # Drive backward 300mm at a speed of 500
-    drivebase.raise_arm()
+    drivebase.raise_arm(reversed=False)
