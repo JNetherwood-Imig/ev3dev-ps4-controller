@@ -12,25 +12,20 @@ from math import pi
 # unless it stalls, in which case it will simply move on in the program
 def run_angle_until_stalled(motor, speed, angle):
     motor.run_angle(speed, angle, wait=False)
-    while True:
+    while not motor.done():
         # Motor stalled
         if motor.stalled():
             motor.stop()
             break
-        # Instruction finished successfully
-        elif motor.done():
-            break
 
-# Check if any motor is stalled
-# and stop continue with the program if either
-# the motor is stalled
-# or the instruction is completed
-def check_stalled(motor):
-    while True:
-        if motor.stalled():
-            motor.stop()
-            break
-        elif motor.done():
+# Check if the drivebase has stalled
+# and break when either the instruction is complete
+# or if a stall is detected       
+def check_drivebase_for_stall(left_motor, right_motor):
+    while not left_motor.done() and not right_motor.done():
+        if left_motor.stalled() or right_motor.stalled():
+            left_motor.stop()
+            right_motor.stop()
             break
 
 # Creating the drivebase class
@@ -61,19 +56,19 @@ class Drivebase:
         degrees = distance / self.wheel_circumference * 360
         self.left_motor.run_angle(speed, degrees, wait=False)
         self.right_motor.run_angle(speed, degrees, wait=False)
-        check_stalled(self.left_motor)
+        check_drivebase_for_stall(self.left_motor, self.right_motor)
     
     # Turn the drivebase a specific number of degrees at a designated speed
-    def turn_angle(self, speed, angle):
-		degrees = (self.axle_track * pi / (360 / angle)) / self.wheel_circumference * 360
-		self.left_motor.run_angle(speed, degrees, wait=False)
-		self.right_motor.run_angle(speed, -degrees, wait=False)
-		check_stalled(self.left_motor)
+    def turn_degrees(self, speed, degrees):
+        motor_degrees = (self.axle_track * pi / (360 / degrees)) / self.wheel_circumference * 360
+        self.left_motor.run_angle(speed, motor_degrees, wait=False)
+        self.right_motor.run_angle(speed, -motor_degrees, wait=False)
+        check_drivebase_for_stall(self.left_motor, self.right_motor)
   
-  # Stop the drivebase
-  def stop(self):
-      self.left_motor.stop()
-      self.right_motor.stop()
+    # Stop the drivebase
+    def stop(self):
+        self.left_motor.stop()
+        self.right_motor.stop()
         
     # Start the intake for an intake based robot
     def start_intake(self, reversed):

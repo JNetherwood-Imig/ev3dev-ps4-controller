@@ -3,7 +3,7 @@ from pybricks.ev3devices import Motor
 from pybricks.parameters import (Port, Stop, Direction, Button)
 from pybricks.tools import wait
 
-from auto import (auto, drivebase)
+from auto import (auto, drivebase, auto_button)
 import struct
 import io
 
@@ -49,10 +49,10 @@ def try_infile(file_num):
 # Test all files from /dev/input/event3 to event5
 file_nums = [ 3, 4, 5 ]
 success = False
-for i in file_nums:
+for file_num in file_nums:
     # If the try infile function returns True
     # then the expression evaluates to true and the loop breaks at the current (correct) file
-    if try_infile(i):
+    if try_infile(file_num):
         success = True
         break
 
@@ -69,7 +69,7 @@ while True:
     (tv_sec, tv_usec, ev_type, code, value) = struct.unpack(DATA_FORMAT, in_file.read(EVENT_SIZE))
     
     # Read analog stick values    
-    if ev_type == 3: # Stick or trigger moved
+    if ev_type == 3: # Analog stick or trigger
         if code == 1: # Left stick y axis
             drive_speed = scale(value, (0,255), (100,-100)) # Scale input from 0-255 to -100-100 for the motor
         if code == 3: # Right stick x axis
@@ -78,12 +78,9 @@ while True:
             arm_power = value / 3
         if code == 5: # Left trigger axis
             arm_power = -value / 3
-    if ev_type == 1: # Button pressed
-        if code == 305 and value == 1:
+    if ev_type == 1: # Button
+        if code == auto_button and value == 1:
             auto()
             
     # Set motor voltages. 
     drivebase.drive(drive_speed, turn_rate, arm_power)
-
-if controller_connected:
-    in_file.close()
