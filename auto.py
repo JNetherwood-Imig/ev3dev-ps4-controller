@@ -1,32 +1,29 @@
-from drivebase import Drivebase
+from definitions import ButtonCode
+from pybricks.robotics import DriveBase
 from pybricks.ev3devices import Motor
-from pybricks.parameters import Port
-
-########
-# Auto #
-########
+from pybricks.parameters import (Port, Stop)
 
 # Declare motors 
+# These motors are used by other parts of the code so their names need to stay the same
 left_motor = Motor(Port.A)
 right_motor = Motor(Port.B)
 arm_motor = Motor(Port.C)
 
-# Declare which button to use to start auto code
-# a full list of button codes is available in the github README
-auto_button = 305 # Circle button
+# Declare which buttons to use to start auto code and stop the robot
+auto_button = ButtonCode.CIRCLE
+stop_button = ButtonCode.SQUARE
 
 # Define drivebase
-drivebase = Drivebase(
-	left_motor,	 # left motor
-	right_motor, # right motor
-	arm_motor,   # arm motor
-	55,          # wheel diameter (mm)
-	121)         # axle track (mm)
+drivebase = DriveBase(
+	left_motor,
+	right_motor,
+	wheel_diameter=55,
+	axle_track=121) # distance betweed wheels. adjust if the robot is not turning the expected amount while in auto
 
 # Auto function
 # place all auto code in this function
 def auto():
-	drivebase.move_distance(300, 500) # Drives for 300mm at a speed of 500
-	drivebase.lower_arm(reversed=False)
-	drivebase.move_distance(-300, 500) # Drive backward 300mm at a speed of 500
-	drivebase.raise_arm(reversed=False)
+	drivebase.straight(500) # Drives for 300mm
+	arm_motor.run_angle(500, 90, then=Stop.BRAKE)
+	drivebase.straight(-500) # Drive backward 300mm
+	arm_motor.run_angle(500, -90, then=Stop.BRAKE)

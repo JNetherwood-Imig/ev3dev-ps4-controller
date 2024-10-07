@@ -1,32 +1,6 @@
-# Drivebase instructions
-In the auto.py file is a drivebase object which is created near the top. This should be created with parameters that match your robot.
-The wheel diameter should not need to be changed unless the wheels are modified, but the axle track is important. It represents the distance between the two weels. To get an accurate value, measure from the middle of one wheel to the middle of the other.
-
-## Drivebase commands
-   >[!NOTE]
-   >The speed values are arbitrary and do not have defined units\
-   >All functions are called in the form of: `drivebase_name.function_name()`
-
-### move(speed)
-Drives at a given speed until stop is called
-### move_distance(distance, speed)
-Drives for a given amount of millimeters at a given speed
-### turn(speed)
-Spins around at a given speed until stop is called
-### turn_angle(angle, speed)
-Turns at a given speed and stops after a given number of degrees
-### stop()
-Stops the robot
-### start_intake(reversed=True/False)
-Starts the intake and takes a boolean to specify if the direction should be reversed
-### stop_intake()
-Stops the intake
-### raise_arm(reversed=True/False)
-Raises the arm until the motor stalls and takes a boolean for reversing the direction
-### lower_arm(reversed=True/False)
-Lowers the arm until the motor stalls and takes a boolean for reversing the direction
-### drive()
-This function is only used the main file as it just drives the robot using the controller input
+# Basic functionality
+Most of the code will be done using the default pybricks v3.5 api
+Documentation is available online, though make sure to select the documentation for pybricks 3.5, not 2.0
 
 # Controller button codes
 | Event                      | Code | Possible Values | Description                 |
