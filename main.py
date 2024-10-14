@@ -4,7 +4,7 @@ from pybricks.parameters import (Port, Stop, Direction, Button)
 from pybricks.tools import wait
 
 from auto import (auto, auto_button, stop_button, disable_stop_button, left_motor, right_motor, arm_motor)
-from definitions import (ButtonCode, AxisCode, EventType)
+from definitions import (ButtonEvent, AxisCode, EventType)
 import struct
 import usys
 import sys
@@ -50,9 +50,9 @@ def main():
             if code == AxisCode.RIGHT_TRIGGER:
                 arm_power = -value / 3
         if ev_type == EventType.BUTTON:
-            if code == stop_button and value == 1 and not disable_stop_button:
+            if code == stop_button and value == ButtonEvent.PRESSED and not disable_stop_button:
                 break
-            if code == auto_button and value == 1:
+            if code == auto_button and value == ButtonEvent.PRESSED:
                 auto()
                 
         arm_motor.dc(arm_power)
