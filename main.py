@@ -9,12 +9,14 @@ import struct
 import usys
 import sys
 
-##############################################################
-# DO NOT MODIFY THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING #
-# Coding is indended to be done in the auto.py file,         #
-# where you will set up your robot                           #
-# and write your autonomous code                             #
-##############################################################
+######################################################
+# DO NOT MODIFY THIS FILE (main.py)                  #
+# UNLESS YOU KNOW WHAT YOU ARE DOING                 #
+#                                                    #
+# Coding is intended to be done in the auto.py file, #
+# where you will set up your robot and               #
+# write your autonomous code                         #
+######################################################
 
 def main():
     print("Implementation: " + str(usys.implementation))
