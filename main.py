@@ -18,6 +18,12 @@ import sys
 # write your autonomous code                         #
 ######################################################
 
+# Helper function to scale values from a source range to a destination range
+def scale(val, source, target):
+    return (float(val - source[0]) / (source[1] - source[0])) * (target[1] - target[0]) + target[0]
+
+
+# main function
 def main():
     print("Implementation: " + str(usys.implementation))
     print("Version: " + str(usys.version))
@@ -70,10 +76,7 @@ def main():
 
     in_file.close()
 
+# program entry point
 if __name__ == "__main__":
     main()
-
-# Helper function to scale values from a source range to a destination range
-def scale(val, source, target):
-    return (float(val - source[0]) / (source[1] - source[0])) * (target[1] - target[0]) + target[0]
 
