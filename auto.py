@@ -15,6 +15,8 @@ auto_button = ButtonCode.CIRCLE
 stop_button = ButtonCode.SQUARE
 disable_stop_button = False # For competition, you may want to disable the stop button to prevent accidentally terminating your code
 
+controller_deadzone = 0.1
+
 # Define drivebase
 drivebase = DriveBase(
 	left_motor,
