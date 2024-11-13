@@ -56,11 +56,11 @@ def main():
         if ev_type == EventType.AXIS:
             if code == AxisCode.LEFT_STICK_Y:
                 drive_speed = scale(value, (0,255), (100,-100))
-                if drive_speed < controller_deadzone * 100:
+                if abs(drive_speed) < controller_deadzone * 100:
                     drive_speed = 0
             if code == AxisCode.RIGHT_STICK_X:
                 turn_rate = scale(value, (0,255), (100, -100))
-                if turn_rate < controller_deadzone * 100:
+                if abs(turn_rate) < controller_deadzone * 100:
                     turn_rate = 0
             if code == AxisCode.LEFT_TRIGGER:
                 arm_power = value / 3
