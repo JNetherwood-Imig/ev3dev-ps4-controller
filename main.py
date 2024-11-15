@@ -16,6 +16,8 @@ import sys
 # Coding is intended to be done in the auto.py file, #
 # where you will set up your robot and               #
 # write your autonomous code                         #
+# To switch to the unstable dev branch,              #
+# use 'git switch dev' in the terminal               #
 ######################################################
 
 # Helper function to scale values from a source range to a destination range
