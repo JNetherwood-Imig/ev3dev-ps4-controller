@@ -1,3 +1,11 @@
+####################################################
+# WARNING: This is an unstable development branch. #
+# All new features are first implemented here,     #
+# meaning that breaking changes are possible.      #
+# Unless you need any of the unstable features,    #
+# it is recommended that you use the main branch.  #
+####################################################
+
 from definitions import ButtonCode
 
 from pybricks.robotics import DriveBase

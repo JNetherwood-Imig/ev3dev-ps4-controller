@@ -1,4 +1,13 @@
 #!/usr/bin/env pybricks-micropython
+
+####################################################
+# WARNING: This is an unstable development branch. #
+# All new features are first implemented here,     #
+# meaning that breaking changes are possible.      #
+# Unless you need any of the unstable features,    #
+# it is recommended that you use the main branch.  #
+####################################################
+
 from auto import (auto, auto_button, stop_button, disable_stop_button, left_motor, right_motor, arm_motor, reverse_motor_direction)
 from definitions import (ButtonEvent, AxisCode, EventType)
 
