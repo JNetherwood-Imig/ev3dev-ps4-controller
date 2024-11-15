@@ -87,6 +87,7 @@ def main() -> None:
 
     event: bytes = in_file.read(EVENT_SIZE)
 
+    arm_power: float = 0
     while event:
         (_, _, ev_type, ev_code, ev_value) = struct.unpack(DATA_FORMAT, event)
         if ev_type == EventType.BUTTON:
@@ -98,8 +99,7 @@ def main() -> None:
         arcade_drive(ev_type, ev_code, ev_value)
         # tank_drive(ev_type, ev_code, ev_value)
 
-        arm_power = 0
-        arm_sensitivity = 0.3
+        arm_sensitivity = 0.25
         if ev_type == EventType.AXIS:
             if ev_code == AxisCode.LEFT_TRIGGER:
                 arm_power = ev_value * arm_sensitivity
