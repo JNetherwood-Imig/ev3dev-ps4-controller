@@ -4,7 +4,7 @@ from pybricks.parameters import (Port, Stop, Direction, Button)
 from pybricks.tools import wait
 
 from auto import (auto, auto_button, stop_button, disable_stop_button, left_motor, right_motor, arm_motor, controller_deadzone)
-from definitions import (ButtonEvent, AxisCode, EventType)
+from definitions import (ButtonEvent, AxisCode, EventType, ButtonCode)
 import struct
 import usys
 import sys
@@ -73,6 +73,10 @@ def main():
                 break
             if code == auto_button and value == ButtonEvent.PRESSED:
                 auto()
+            # Example: X button
+            if code == ButtonCode.X:
+                # Do someting with x button
+                pass
                 
         arm_motor.dc(arm_power)
         left_motor.dc(drive_speed - turn_rate)
