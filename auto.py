@@ -24,6 +24,12 @@ drivebase = DriveBase(
 	wheel_diameter=55,
 	axle_track=121) # distance betweed wheels. adjust if the robot is not turning the expected amount while in auto
 
+print("Default drivebase settings are:", str(drivebase.settings()))
+# The default settings which print out at the beginning of the program are about 40% of the maximum values
+# To make your drivebase faster, use 'drivebase.settings(xx, xx, xx, xx)', where the arguments are
+# straight speed, straight acceleration, turn rate, turn acceleration
+# To avoid pybricks crashing, keep the parameters within a reasonable range
+
 # This function will be run when you press the auto button as defined above
 # There is little limitation on what this function can do, so if you want, you could make it use a distance sensor
 # You are not limited to driving instructions
