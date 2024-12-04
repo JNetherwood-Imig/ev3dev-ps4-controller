@@ -8,7 +8,7 @@
 # it is recommended that you use the main branch.  #
 ####################################################
 
-from auto import (on_init, auto, auto_button, stop_button, disable_stop_button, left_motor, right_motor, arm_motor, reverse_motor_direction)
+import user_code as config
 from definitions import (ButtonEvent, AxisCode, EventType)
 from controller_callbacks import controller_callbacks
 
@@ -39,14 +39,18 @@ class Controller:
 def update_controller(ev_type: int, ev_code: int, ev_value: int):
     if ev_type != EventType.AXIS:
         return
+
+    value: float = scale(ev_value, (0, 255), (100, -100))
+    value = 0 if abs(value) < config.controller_deadzone * 100 else value
+
     if ev_code == AxisCode.LEFT_STICK_X:
-        Controller.left_x = scale(ev_value, (0, 255), (100, -100))
+        Controller.left_x = value
     elif ev_code == AxisCode.LEFT_STICK_Y:
-        Controller.left_y = scale(ev_value, (0, 255), (100, -100))
+        Controller.left_y = value
     elif ev_code == AxisCode.RIGHT_STICK_X:
-        Controller.right_x = scale(ev_value, (0, 255), (100, -100))
+        Controller.right_x = value
     elif ev_code == AxisCode.RIGHT_STICK_Y:
-        Controller.right_y = scale(ev_value, (0, 255), (100, -100))
+        Controller.right_y = value
 
 # Helper function to scale values from a source range to a destination range
 def scale(val: float, source: tuple[int, int], target: tuple[int, int]) -> float:
@@ -80,22 +84,26 @@ def arcade_drive():
             left_power = -maximum
             right_power = difference
 
-    if reverse_motor_direction:
+    if config.reverse_motor_direction:
         left_power *= -1
         right_power *= -1
 
-    left_motor.dc(left_power)
-    right_motor.dc(right_power)
+    config.left_motor.dc(left_power)
+    config.right_motor.dc(right_power)
 
-def tank_drive() -> None:
-    left_power = scale(Controller.left_y, (0, 255), (100, -100))
-    right_power = scale(Controller.right_y, (0, 255), (100, -100))
-    if reverse_motor_direction:
-        left_power *= -1
-        right_power += -1
-
-    left_motor.dc(left_power)
-    right_motor.dc(right_power)
+# TODO: Fix tank drive
+# Current logic doesn't quite work,
+# I think right motor needs to be reversed,
+# but I can't test it right now
+# def tank_drive() -> None:
+#     left_power = Controller.left_y
+#     right_power = Controller.right_y
+#     if config.reverse_motor_direction:
+#         left_power *= -1
+#         right_power += -1
+#
+#     config.left_motor.dc(left_power)
+#     config.right_motor.dc(right_power)
 
 def open_input_file(path: str) -> io.BufferedReader:
     try:
@@ -119,33 +127,32 @@ def main() -> None:
     # Open controller input file
     in_file: io.BufferedReader = open_input_file("/dev/input/event4")
 
-    on_init()
+    config.on_init()
 
     event: bytes = in_file.read(EVENT_SIZE)
 
-    arm_power: float = 0
     while event:
         (_, _, ev_type, ev_code, ev_value) = struct.unpack(DATA_FORMAT, event)
         if ev_type == EventType.BUTTON:
-            if ev_code == stop_button and ev_value == ButtonEvent.PRESSED and not disable_stop_button:
+            if ev_code == config.stop_button and ev_value == ButtonEvent.PRESSED and not config.disable_stop_button:
                 break
-            if ev_code == auto_button and ev_value == ButtonEvent.PRESSED:
-                auto()
+            if ev_code == config.auto_button and ev_value == ButtonEvent.PRESSED:
+                config.auto()
+            for cb in controller_callbacks:
+                cb.try_run(ev_type, ev_code, ev_value)
         
         update_controller(ev_type, ev_code, ev_value)
         arcade_drive()
-        # tank_drive()
 
-        arm_sensitivity = 0.25
-        if ev_type == EventType.AXIS:
-            if ev_code == AxisCode.LEFT_TRIGGER:
-                arm_power = ev_value * arm_sensitivity
-            if ev_code == AxisCode.RIGHT_TRIGGER:
-                arm_power = -ev_value * arm_sensitivity
-        arm_motor.dc(arm_power)
-
-        for cb in controller_callbacks:
-            cb.try_run(ev_type, ev_code, ev_value)
+        if not config.disable_arm_motor:
+            arm_sensitivity: float = 0.25
+            arm_power: float = 0
+            if ev_type == EventType.AXIS:
+                if ev_code == AxisCode.LEFT_TRIGGER:
+                    arm_power = ev_value * arm_sensitivity
+                if ev_code == AxisCode.RIGHT_TRIGGER:
+                    arm_power = -ev_value * arm_sensitivity
+            config.arm_motor.dc(arm_power)
 
         event = in_file.read(EVENT_SIZE)
 

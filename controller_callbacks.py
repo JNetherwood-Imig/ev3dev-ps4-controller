@@ -3,7 +3,6 @@ from definitions import *
 class CallbackType:
     ON_PRESS = 0
     ON_RELEASE = 1
-    AXIS = 2
 
 class ControllerCallback:
     code: int
@@ -30,13 +29,7 @@ class ControllerCallback:
         elif self.cb_type == CallbackType.ON_RELEASE and ev_type == EventType.BUTTON and self.code == ev_code and ev_value == ButtonEvent.RELEASED:
             self.callback(ev_value)
 
-        elif self.cb_type == CallbackType.AXIS and ev_type == EventType.AXIS and self.code == ev_code:
-            self.callback(ev_value)
-
 controller_callbacks: list[ControllerCallback] = []
-
-def register_axis_callback(code: int, callback: function):
-    controller_callbacks.append(ControllerCallback(code, CallbackType.AXIS, EventType.AXIS, callback))
 
 def register_on_press_callback(code: int, callback: function):
     controller_callbacks.append(ControllerCallback(code, CallbackType.ON_PRESS, EventType.BUTTON, callback))
