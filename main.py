@@ -8,7 +8,7 @@
 # it is recommended that you use the main branch.  #
 ####################################################
 
-from auto import (auto, auto_button, stop_button, disable_stop_button, left_motor, right_motor, arm_motor, reverse_motor_direction)
+from auto import (on_init, auto, auto_button, stop_button, disable_stop_button, left_motor, right_motor, arm_motor, reverse_motor_direction)
 from definitions import (ButtonEvent, AxisCode, EventType)
 from controller_callbacks import controller_callbacks
 
@@ -118,6 +118,8 @@ def main() -> None:
 
     # Open controller input file
     in_file: io.BufferedReader = open_input_file("/dev/input/event4")
+
+    on_init()
 
     event: bytes = in_file.read(EVENT_SIZE)
 

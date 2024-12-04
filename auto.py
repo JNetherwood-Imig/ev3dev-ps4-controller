@@ -71,6 +71,10 @@ register_on_release_callback(ButtonCode.TRIANGLE, on_triangle_release)
 register_axis_callback(AxisCode.LEFT_STICK_X, on_lx_axis)
 '''
 
+# This function will be run once when the program starts up
+def on_init() -> None:
+    pass
+
 # This function will be run when you press the auto button as defined above
 # There is little limitation on what this function can do, so if you want, you could make it use a distance sensor
 # You are not limited to driving instructions
