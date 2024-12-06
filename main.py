@@ -105,7 +105,7 @@ def arcade_drive():
 #     config.left_motor.dc(left_power)
 #     config.right_motor.dc(right_power)
 
-def open_input_file(path: str) -> io.BufferedReader | None:
+def open_input_file(path: str) -> io.BufferedReader:
     try:
         in_file: io.BufferedReader = open(path, "rb")
         print("Controller connected!")
@@ -113,7 +113,7 @@ def open_input_file(path: str) -> io.BufferedReader | None:
     except:
         print("Failed to open {} for reading.".format(path))
         print("Make sure your controller is turned on and connected.")
-        return None
+        exit(1)
 
 # main function
 def main() -> None:
@@ -125,14 +125,7 @@ def main() -> None:
     EVENT_SIZE: int = struct.calcsize(DATA_FORMAT)
 
     # Open controller input file
-    in_file: io.BufferedReader | None = next(
-            (file for file in (open_input_file("/dev/input/event4"),
-                               open_input_file("/dev/input/event5"))
-             if file is not None), None)
-
-    if in_file is None:
-        print("Failed to connect to controller. Make sure it is turned on and connected.")
-        exit(1)
+    in_file: io.BufferedReader = open_input_file("/dev/input/event" + str(config.controller_file))
 
     config.on_init()
 

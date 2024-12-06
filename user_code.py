@@ -27,6 +27,12 @@ disable_stop_button: bool = False # For competition, you probably want to disabl
 reverse_motor_direction: bool = False
 disable_arm_motor: bool = False
 
+# If your robot is either failing to connect to the controller
+# or the motors go crazy when you run,
+# switch the 4 to a 5
+# Note: you will probably have to switch back to 4 at some point when the issue fixes itself
+controller_file: int = 4
+
 # If you are experiencing controller drift, increase this to 0.1 or 0.2
 controller_deadzone: float = 0.0
 
@@ -42,28 +48,6 @@ drivebase: DriveBase = DriveBase(
 # straight speed, straight acceleration, turn rate, turn acceleration
 # To avoid pybricks crashing, keep the parameters within a reasonable range
 print("Default drivebase settings are:", str(drivebase.settings()))
-
-
-############################
-# EXAMPLE BUTTON CALLBACKS #
-############################
-'''
-Declaring your own button callbacks will work as follows
-# Note: all callback functions need to take an integer value as a parameter.
-# If you don't need to know the event value, just name the parameter _
-
-def on_triangle_press(_: int):
-    print("Triangle button pressed.")
-
-def on_triangle_release(_: int):
-    print("Triangle button released.")
-
-# This will be run ONCE when the triangle button is pressed
-register_on_press_callback(ButtonCode.TRIANGLE, on_triangle_press)
-
-# This will be run ONCE when the triangle button is released
-register_on_release_callback(ButtonCode.TRIANGLE, on_triangle_release)
-'''
 
 # This function will be run once when the program starts up
 def on_init() -> None:
