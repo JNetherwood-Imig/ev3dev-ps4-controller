@@ -7,7 +7,7 @@ from auto import (auto, auto_button, stop_button, disable_stop_button, left_moto
 from definitions import (ButtonEvent, AxisCode, EventType, ButtonCode)
 import struct
 import usys
-import sys
+from sys import exit
 
 ######################################################
 # DO NOT MODIFY THIS FILE (main.py)                  #
