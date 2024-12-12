@@ -13,11 +13,43 @@ from pybricks.robotics import DriveBase
 from pybricks.ev3devices import Motor
 from pybricks.parameters import (Port, Stop)
 
+# Utilities, do not touch
+def get_port_string(port: Port) -> str:
+    match port:
+        case Port.A:
+            return "A"
+        case Port.B:
+            return "B"
+        case Port.C:
+            return "C"
+        case Port.D:
+            return "D"
+        case _:
+            return "Unknown"
+
+def init_motors():
+    global left_motor, right_motor, arm_motor
+    try:
+        left_motor = Motor(left_motor_port)
+        right_motor = Motor(right_motor_port)
+        arm_motor = Motor(arm_motor_port)
+    except:
+        print("Failed to initialize motors")
+        print("Expected port configuration:")
+        print("Left motor: ", get_port_string(left_motor_port))
+        print("Right motor: ", get_port_string(right_motor_port))
+        print("Arm motor: ", get_port_string(arm_motor_port))
+
 # Declare motors 
 # DO NOT CHANGE THE VARIABLE NAMES, only the ports, such that they match your robot configuration
-left_motor: Motor  = Motor(Port.A)
-right_motor: Motor = Motor(Port.B)
-arm_motor: Motor   = Motor(Port.C)
+left_motor_port = Port.A
+right_motor_port = Port.B
+arm_motor_port = Port.C
+
+left_motor: Motor  = Motor(left_motor_port)
+right_motor: Motor = Motor(right_motor_port)
+arm_motor: Motor   = Motor(arm_motor_port)
+init_motors()
 
 # Declare which buttons to use to start auto code and stop the robot
 # A full list of button codes can be found in definitions.py
@@ -35,6 +67,11 @@ controller_file: int = 4
 
 # If you are experiencing controller drift, increase this to 0.1 or 0.2
 controller_deadzone: float = 0.0
+
+# If one of your motors is faster than the other, you can slow it down a bit here
+left_motor_sensitivity: float = 1.0
+right_motor_sensitivity: float = 1.0
+arm_motor_sensitivity: float = 0.25
 
 # Define drivebase
 drivebase: DriveBase = DriveBase(

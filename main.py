@@ -88,8 +88,8 @@ def arcade_drive():
         left_power *= -1
         right_power *= -1
 
-    config.left_motor.dc(left_power)
-    config.right_motor.dc(right_power)
+    config.left_motor.dc(left_power * config.left_motor_sensitivity)
+    config.right_motor.dc(right_power * config.right_motor_sensitivity)
 
 # TODO: Fix tank drive
 # Current logic doesn't quite work,
@@ -145,13 +145,12 @@ def main() -> None:
         arcade_drive()
 
         if not config.disable_arm_motor:
-            arm_sensitivity: float = 0.25
             arm_power: float = 0
             if ev_type == EventType.AXIS:
                 if ev_code == AxisCode.LEFT_TRIGGER:
-                    arm_power = ev_value * arm_sensitivity
+                    arm_power = ev_value * config.arm_motor_sensitivity
                 if ev_code == AxisCode.RIGHT_TRIGGER:
-                    arm_power = -ev_value * arm_sensitivity
+                    arm_power = -ev_value * config.arm_motor_sensitivity
             config.arm_motor.dc(arm_power)
 
         event = in_file.read(EVENT_SIZE)
