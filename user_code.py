@@ -12,20 +12,23 @@ from definitions import ButtonCode
 from pybricks.robotics import DriveBase
 from pybricks.ev3devices import Motor
 from pybricks.parameters import (Port, Stop)
+from pybricks.hubs import EV3Brick
+from pybricks.media.ev3dev import Font
+
+from time import sleep
 
 # Utilities, do not touch
 def get_port_string(port: Port) -> str:
-    match port:
-        case Port.A:
-            return "A"
-        case Port.B:
-            return "B"
-        case Port.C:
-            return "C"
-        case Port.D:
-            return "D"
-        case _:
-            return "Unknown"
+    if port == Port.A:
+        return "A"
+    if port == Port.B:
+        return "B"
+    if port == Port.C:
+        return "C"
+    if port == Port.D:
+        return "D"
+
+    return "Unknown"
 
 def init_motors():
     global left_motor, right_motor, arm_motor
@@ -34,11 +37,16 @@ def init_motors():
         right_motor = Motor(right_motor_port)
         arm_motor = Motor(arm_motor_port)
     except:
-        print("Failed to initialize motors")
-        print("Expected port configuration:")
-        print("Left motor: ", get_port_string(left_motor_port))
-        print("Right motor: ", get_port_string(right_motor_port))
-        print("Arm motor: ", get_port_string(arm_motor_port))
+        ev3: EV3Brick = EV3Brick()
+        ev3.screen.clear()
+        ev3.screen.set_font(Font(size=14))
+        ev3.screen.print("Failed to initialize motors")
+        ev3.screen.print("Expected port configuration:")
+        ev3.screen.print("Left motor:", get_port_string(left_motor_port))
+        ev3.screen.print("Right motor:", get_port_string(right_motor_port))
+        ev3.screen.print("Arm motor:", get_port_string(arm_motor_port))
+        while True:
+            sleep(1)
 
 # Declare motors 
 # DO NOT CHANGE THE VARIABLE NAMES, only the ports, such that they match your robot configuration
@@ -46,9 +54,9 @@ left_motor_port = Port.A
 right_motor_port = Port.B
 arm_motor_port = Port.C
 
-left_motor: Motor  = Motor(left_motor_port)
-right_motor: Motor = Motor(right_motor_port)
-arm_motor: Motor   = Motor(arm_motor_port)
+left_motor: Motor = None
+right_motor: Motor = None
+arm_motor: Motor = None
 init_motors()
 
 # Declare which buttons to use to start auto code and stop the robot
