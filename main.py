@@ -15,11 +15,15 @@ from controller_callbacks import controller_callbacks
 from pybricks.ev3devices import Motor
 from pybricks.parameters import (Port, Stop, Direction, Button)
 from pybricks.tools import wait
+from pybricks.hubs import EV3Brick
+from pybricks.media.ev3dev import Font
 import usys
 
 import struct
 from sys import exit
 import io
+import re
+from time import sleep
 
 ######################################################
 # DO NOT MODIFY THIS FILE (main.py)                  #
@@ -92,27 +96,56 @@ def arcade_drive():
     config.right_motor.dc(right_power * config.right_motor_sensitivity)
 
 # TODO: Fix tank drive
-# Current logic doesn't quite work,
-# I think right motor needs to be reversed,
-# but I can't test it right now
-# def tank_drive() -> None:
-#     left_power = Controller.left_y
-#     right_power = Controller.right_y
-#     if config.reverse_motor_direction:
-#         left_power *= -1
-#         right_power += -1
-#
-#     config.left_motor.dc(left_power)
-#     config.right_motor.dc(right_power)
+def tank_drive() -> None:
+    left_power = Controller.left_y
+    right_power = Controller.right_y
+    if config.reverse_motor_direction:
+        left_power *= -1
+        right_power += -1
+
+    config.left_motor.dc(left_power)
+    config.right_motor.dc(right_power)
+
+def get_input_file_path() -> str:
+    ev3: EV3Brick = EV3Brick()
+    try:
+        event_list: io.TextIOWrapper = open("/proc/bus/input/devices", "r")
+        content: str = event_list.read()
+        devices = content.strip().split("\n\n")
+        for device in devices:
+            if "Name=\"Wireless Controller\"" in device:
+                match = re.search(r"Handlers=(\S+)", device)
+                if match:
+                    return "/dev/input/" + match.group(1)
+                else:
+                    ev3.screen.clear()
+                    ev3.screen.set_font(Font(size=14))
+                    ev3.screen.print("Failed to find event handler for controller.")
+                    sleep(15)
+                    exit(1)
+        ev3.screen.clear()
+        ev3.screen.set_font(Font(size=14))
+        ev3.screen.print("Failed to find\n\"Wireless Controller\"\nin /proc/bus/input/devices.")
+        ev3.screen.print("Make sure your controller\nis turned on and connected.")
+        sleep(15)
+        exit(1)
+        
+    except:
+        print("Failed to get event file list")
+        exit(1)
 
 def open_input_file(path: str) -> io.BufferedReader:
+    ev3: EV3Brick = EV3Brick()
+    ev3.screen.clear()
+    ev3.screen.set_font(Font(size=14))
     try:
         in_file: io.BufferedReader = open(path, "rb")
-        print("Controller connected!")
+        ev3.screen.print("Controller connected!")
         return in_file
     except:
-        print("Failed to open {} for reading.".format(path))
-        print("Make sure your controller is turned on and connected.")
+        ev3.screen.print("Failed to open {} for reading.".format(path))
+        ev3.screen.print("Make sure your controller is turned on and connected.")
+        sleep(15)
         exit(1)
 
 # main function
@@ -125,12 +158,13 @@ def main() -> None:
     EVENT_SIZE: int = struct.calcsize(DATA_FORMAT)
 
     # Open controller input file
-    in_file: io.BufferedReader = open_input_file("/dev/input/event" + str(config.controller_file))
+    in_file: io.BufferedReader = open_input_file(get_input_file_path())
 
     config.on_init()
 
     event: bytes = in_file.read(EVENT_SIZE)
 
+    arm_power: float = 0
     while event:
         (_, _, ev_type, ev_code, ev_value) = struct.unpack(DATA_FORMAT, event)
         if ev_type == EventType.BUTTON:
@@ -142,10 +176,10 @@ def main() -> None:
                 cb.try_run(ev_type, ev_code, ev_value)
         
         update_controller(ev_type, ev_code, ev_value)
-        arcade_drive()
+        # arcade_drive()
+        tank_drive()
 
         if not config.disable_arm_motor:
-            arm_power: float = 0
             if ev_type == EventType.AXIS:
                 if ev_code == AxisCode.LEFT_TRIGGER:
                     arm_power = ev_value * config.arm_motor_sensitivity

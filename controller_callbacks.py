@@ -21,13 +21,13 @@ class ControllerCallback:
     def try_run(self, ev_type: int, ev_code: int, ev_value: int) -> None:
         if self.cb_type == CallbackType.ON_PRESS and ev_type == EventType.BUTTON and self.code == ev_code:
             if ev_value == ButtonEvent.PRESSED and not self.skip:
-                self.callback(ev_value)
+                self.callback()
                 self.skip = True
             elif ev_value == ButtonEvent.RELEASED:
                 self.skip = False
 
         elif self.cb_type == CallbackType.ON_RELEASE and ev_type == EventType.BUTTON and self.code == ev_code and ev_value == ButtonEvent.RELEASED:
-            self.callback(ev_value)
+            self.callback()
 
 controller_callbacks: list[ControllerCallback] = []
 

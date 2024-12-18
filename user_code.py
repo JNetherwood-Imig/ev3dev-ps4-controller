@@ -37,6 +37,7 @@ def init_motors():
         right_motor = Motor(right_motor_port)
         arm_motor = Motor(arm_motor_port)
     except:
+        print("Error: bad port configuration")
         ev3: EV3Brick = EV3Brick()
         ev3.screen.clear()
         ev3.screen.set_font(Font(size=14))
@@ -45,8 +46,8 @@ def init_motors():
         ev3.screen.print("Left motor:", get_port_string(left_motor_port))
         ev3.screen.print("Right motor:", get_port_string(right_motor_port))
         ev3.screen.print("Arm motor:", get_port_string(arm_motor_port))
-        while True:
-            sleep(1)
+        sleep(15)
+        exit(1)
 
 # Declare motors 
 # DO NOT CHANGE THE VARIABLE NAMES, only the ports, such that they match your robot configuration
@@ -66,12 +67,6 @@ stop_button: int = ButtonCode.SQUARE
 disable_stop_button: bool = False # For competition, you probably want to disable the stop button to prevent accidentally terminating your code
 reverse_motor_direction: bool = False
 disable_arm_motor: bool = False
-
-# If your robot is either failing to connect to the controller
-# or the motors go crazy when you run,
-# switch the 4 to a 5
-# Note: you will probably have to switch back to 4 at some point when the issue fixes itself
-controller_file: int = 4
 
 # If you are experiencing controller drift, increase this to 0.1 or 0.2
 controller_deadzone: float = 0.0
