@@ -141,6 +141,7 @@ def open_input_file(path: str) -> io.BufferedReader:
     try:
         in_file: io.BufferedReader = open(path, "rb")
         ev3.screen.print("Controller connected!")
+        ev3.screen.print("Using\n{}".format(path))
         return in_file
     except:
         ev3.screen.print("Failed to open {} for reading.".format(path))
