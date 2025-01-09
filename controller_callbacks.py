@@ -1,4 +1,4 @@
-from definitions import *
+import utils
 
 class CallbackType:
     ON_PRESS = 0
@@ -19,21 +19,28 @@ class ControllerCallback:
         self.callback = callback
 
     def try_run(self, ev_type: int, ev_code: int, ev_value: int) -> None:
-        if self.cb_type == CallbackType.ON_PRESS and ev_type == EventType.BUTTON and self.code == ev_code:
-            if ev_value == ButtonEvent.PRESSED and not self.skip:
+        if self.cb_type == CallbackType.ON_PRESS and \
+                ev_type == utils.EventType.BUTTON and \
+                self.code == ev_code:
+            if ev_value == utils.ButtonEvent.PRESSED and not self.skip:
                 self.callback()
                 self.skip = True
-            elif ev_value == ButtonEvent.RELEASED:
+            elif ev_value == utils.ButtonEvent.RELEASED:
                 self.skip = False
 
-        elif self.cb_type == CallbackType.ON_RELEASE and ev_type == EventType.BUTTON and self.code == ev_code and ev_value == ButtonEvent.RELEASED:
+        elif self.cb_type == CallbackType.ON_RELEASE and \
+                ev_type == utils.EventType.BUTTON and \
+                self.code == ev_code and \
+                ev_value == utils.ButtonEvent.RELEASED:
             self.callback()
 
-controller_callbacks: list[ControllerCallback] = []
+cb_list: list[ControllerCallback] = []
 
 def register_on_press_callback(code: int, callback: function):
-    controller_callbacks.append(ControllerCallback(code, CallbackType.ON_PRESS, EventType.BUTTON, callback))
+    cb_list.append(
+            ControllerCallback(code, CallbackType.ON_PRESS, utils.EventType.BUTTON, callback))
 
 def register_on_release_callback(code: int, callback: function):
-    controller_callbacks.append(ControllerCallback(code, CallbackType.ON_RELEASE, EventType.BUTTON, callback))
+    cb_list.append(
+            ControllerCallback(code, CallbackType.ON_RELEASE, utils.EventType.BUTTON, callback))
 

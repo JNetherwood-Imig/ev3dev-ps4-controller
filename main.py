@@ -9,12 +9,9 @@
 ####################################################
 
 import user_code as config
-from definitions import (ButtonEvent, AxisCode, EventType)
-from controller_callbacks import controller_callbacks
+from utils import (ButtonEvent, AxisCode, EventType, print_ports)
+from controller_callbacks import cb_list
 
-from pybricks.ev3devices import Motor
-from pybricks.parameters import (Port, Stop, Direction, Button)
-from pybricks.tools import wait
 from pybricks.hubs import EV3Brick
 from pybricks.media.ev3dev import Font
 import usys
@@ -24,15 +21,6 @@ from sys import exit
 import io
 import re
 from time import sleep
-
-######################################################
-# DO NOT MODIFY THIS FILE (main.py)                  #
-# UNLESS YOU KNOW WHAT YOU ARE DOING                 #
-#                                                    #
-# Coding is intended to be done in the auto.py file, #
-# where you will set up your robot and               #
-# write your autonomous code                         #
-######################################################
 
 class Controller:
     left_x: float = 0
@@ -56,7 +44,6 @@ def update_controller(ev_type: int, ev_code: int, ev_value: int):
     elif ev_code == AxisCode.RIGHT_STICK_Y:
         Controller.right_y = value
 
-# Helper function to scale values from a source range to a destination range
 def scale(val: float, source: tuple[int, int], target: tuple[int, int]) -> float:
     return (float(val - source[0]) / (source[1] - source[0])) * (target[1] - target[0]) + target[0]
 
@@ -95,7 +82,6 @@ def arcade_drive():
     config.left_motor.dc(left_power * config.left_motor_sensitivity)
     config.right_motor.dc(right_power * config.right_motor_sensitivity)
 
-# TODO: Fix tank drive
 def tank_drive() -> None:
     left_power = Controller.left_y
     right_power = Controller.right_y
@@ -141,24 +127,23 @@ def open_input_file(path: str) -> io.BufferedReader:
     try:
         in_file: io.BufferedReader = open(path, "rb")
         ev3.screen.print("Controller connected!")
-        ev3.screen.print("Using\n{}".format(path))
+        ev3.screen.print("Using\n" + path)
         return in_file
     except:
-        ev3.screen.print("Failed to open {} for reading.".format(path))
+        ev3.screen.print("Failed to open " + path + " for reading.")
         ev3.screen.print("Make sure your controller is turned on and connected.")
         sleep(15)
         exit(1)
 
-# main function
 def main() -> None:
     print("Implementation: " + str(usys.implementation))
     print("Version: " + str(usys.version))
+    print_ports()
 
-     # Corresponds to 'sec: long, usec: long, type: ushort, code: ushort, value: uint'
+    # Corresponds to 'sec: long, usec: long, type: ushort, code: ushort, value: uint'
     DATA_FORMAT: str = "llHHI"
     EVENT_SIZE: int = struct.calcsize(DATA_FORMAT)
 
-    # Open controller input file
     in_file: io.BufferedReader = open_input_file(get_input_file_path())
 
     config.on_init()
@@ -173,12 +158,14 @@ def main() -> None:
                 break
             if ev_code == config.auto_button and ev_value == ButtonEvent.PRESSED:
                 config.auto()
-            for cb in controller_callbacks:
+            for cb in cb_list:
                 cb.try_run(ev_type, ev_code, ev_value)
         
         update_controller(ev_type, ev_code, ev_value)
-        # arcade_drive()
-        tank_drive()
+        if config.use_tank_drive:
+            tank_drive()
+        else:
+            arcade_drive()
 
         if not config.disable_arm_motor:
             if ev_type == EventType.AXIS:
@@ -192,7 +179,5 @@ def main() -> None:
 
     in_file.close()
 
-# program entry point
 if __name__ == "__main__":
     main()
-
