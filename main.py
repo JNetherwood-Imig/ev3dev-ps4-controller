@@ -90,7 +90,7 @@ def tank_drive() -> None:
     right_power = Controller.right_y
     if config.reverse_motor_direction:
         left_power *= -1
-        right_power += -1
+        right_power *= -1
 
     config.left_motor.dc(left_power)
     config.right_motor.dc(right_power)
